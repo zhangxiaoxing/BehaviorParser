@@ -1,4 +1,4 @@
-function results=stats(files)
+function results=stats(files,earlyTrials)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -30,12 +30,18 @@ for mice=1:length(ids)
     f=getMiceFile(ids{mice});
     
     z.setMinLick(minLick);
-    z.processFile(f);
-    tOn=double(sum(z.getPerf(true,50)));  
-    tOff=double(sum(z.getPerf(false,50))); 
-    if length(tOn)<5
-        disp(f);
-        pause;
+    if exist('earlyTrials','var') && earlyTrials
+        z.processFile(f(1,:));
+        tOn=double(sum(z.getPerf(true,10),1));  
+        tOff=double(sum(z.getPerf(false,10),1)); 
+    else
+        z.processFile(f);
+        tOn=double(sum(z.getPerf(true,50)));  
+        tOff=double(sum(z.getPerf(false,50))); 
+        if length(tOn)<5
+            disp(f);
+            pause;
+        end
     end
     
     if tOn(5)>0

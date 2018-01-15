@@ -3,7 +3,7 @@ dpath=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',dpath)
     javaaddpath('I:\java\zmat\build\classes\');
 end
-path(path,'I:\behavior\reports\z');
+path(path,'D:\behavior\reports\z');
 z=zmat.Zmat;
 
 

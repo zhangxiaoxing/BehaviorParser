@@ -33,23 +33,23 @@ plotParallel();
         plot(repmat(place(1:2),size(ctrlOff,1),1)',[ctrlOff ctrlOn]','k-','Color',zGetColor('b1'));
         plot(repmat(place(3:4),size(optoOff,1),1)',[optoOff optoOn]','k-','Color',zGetColor('b1'));
         
-        plot(place(1),ctrlOff,'ko','MarkerSize',4,'MarkerFaceColor','w');
-        plot(place(2),ctrlOn,'ko','MarkerSize',4,'MarkerFaceColor','w','MarkerEdgeColor',zGetColor('b1'));
-        plot(place(3),optoOff,'ko','MarkerSize',4,'MarkerFaceColor','k');
-        plot(place(4),optoOn,'ko','MarkerSize',4,'MarkerFaceColor',zGetColor('b1'),'MarkerEdgeColor',zGetColor('b1'));
+        plot(place(1)+genX(ctrlOff),sort(ctrlOff),'ko','MarkerSize',4,'MarkerFaceColor','none');
+        plot(place(2)+genX(ctrlOn),sort(ctrlOn),'ko','MarkerSize',4,'MarkerFaceColor','none','MarkerEdgeColor',zGetColor('b1'));
+        plot(place(3)+genX(optoOff),sort(optoOff),'ko','MarkerSize',4,'MarkerFaceColor','k');
+        plot(place(4)+genX(optoOn),sort(optoOn),'ko','MarkerSize',4,'MarkerFaceColor',zGetColor('b1'),'MarkerEdgeColor',zGetColor('b1'));
         
         plotMean(ctrlOff,1);
         plotMean(ctrlOn,2);
         plotMean(optoOff,3);
         plotMean(optoOn,4);
         
-        if min([ctrlOff;optoOff])>50
-            ylim([50,100]);
-        elseif measure==3
-            ylim([0,80]);
-        elseif max([ctrlOff;optoOff])<80 && min([ctrlOff;optoOff])>20
-            ylim([0,80]);
-        end
+%         if min([ctrlOff;optoOff;optoOn;ctrlOn])>50
+%             ylim([50,100]);
+%         elseif max([ctrlOff;optoOff;optoOn;ctrlOn])<50 
+%             ylim([0,50]);
+%         end
+        ylim([0,100]);
+
         
         topY=ylim;
         
@@ -68,9 +68,9 @@ plotParallel();
         sigDY=(topY(2)-topY(1))*0.01;
         
 %         if (pOpto<0.05)
-            text(mean(place(3:4)),topY(2)+(7+(pOpto>0.05)*4)*sigDY,sigOpto,'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
+            text(nanmean(place(3:4)),topY(2)+(7+(pOpto>0.05)*4)*sigDY,sigOpto,'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
             if pOpto<0.05 && pOpto>=0.001
-                text(mean(place(3:4)),topY(2)+20*sigDY,sprintf('%0.3f',pOpto),'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
+                text(nanmean(place(3:4)),topY(2)+20*sigDY,sprintf('%0.3f',pOpto),'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
             end
             
             line([place(3) place(4)],[topY(2)+5*sigDY,topY(2)+5*sigDY],'LineWidth',1,'Clipping','Off','Color','k');
@@ -79,9 +79,9 @@ plotParallel();
 %         end
         
 %         if (pCtrl<0.05)
-            text(mean(place(1:2)),topY(2)+(7+(pCtrl>0.05)*4)*sigDY,sigCtrl,'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
+            text(nanmean(place(1:2)),topY(2)+(7+(pCtrl>0.05)*4)*sigDY,sigCtrl,'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
             if pCtrl<0.05 && pCtrl>=0.001
-                text(mean(place(1:2)),topY(2)+20*sigDY,sprintf('%0.3f',pCtrl),'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
+                text(nanmean(place(1:2)),topY(2)+20*sigDY,sprintf('%0.3f',pCtrl),'FontSize',10,'HorizontalAlignment','center','FontName','Helvetica');
             end
             line([place(1) place(2)],[topY(2)+5*sigDY,topY(2)+5*sigDY],'LineWidth',1,'Clipping','Off','Color','k');
             line([place(1) place(1)],[topY(2)+3*sigDY,topY(2)+5*sigDY],'LineWidth',1,'Clipping','Off','Color','k');
@@ -121,10 +121,10 @@ plotParallel();
         dd=0.5;
         semLength=0.25;
         dh=1;
-        stdd=std(data);
+        stdd=nanstd(data);
         n=length(data);
         sem=stdd/sqrt(n);
-        mm=mean(data);
+        mm=nanmean(data);
         if position==1 || position==3
             x1=place(position)-mLength;
             xv=place(position)-dh;
@@ -142,6 +142,26 @@ plotParallel();
         plot([xv-semLength,xv+semLength],[mm-sem,mm-sem],'k-','LineWidth',1.5,'Color',edgeColors{position});
         plot([xv,xv],[mm-sem,mm+sem],'-','Color',edgeColors{position});
         plot(xv,mm,'o','MarkerSize',6,'MarkerEdgeColor',edgeColors{position},'MarkerFaceColor',faceColors{position});
+        
+        
+    end
+
+
+    function xs=genX(ys)
+        delta=[-0.15,0.15,-0.25,0.25,-0.35,0.35,-0.45,0.45];
+        ys=sort(ys);
+        xs=zeros(size(ys));
+        d=0;
+        for i=2:length(ys)
+            if ys(i)-ys(i-1)<0.1
+                if d+1<length(delta)
+                    d=d+1;
+                end
+                xs(i)=delta(d);
+            else
+                d=0;
+            end
+        end
         
         
     end

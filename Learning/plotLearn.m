@@ -37,12 +37,15 @@ classdef plotLearn < handle
                 
                 hf=figure('Color','w','Position',[dx,100,fw,190]);
                 hold on;
+                plot(data(data(:,2)==0,3:end)','-','Color',[0.4,0.4,0.4]);
+                plot(data(data(:,2)==1,3:end)','-','Color',[0.6,0.6,1]);
                 hc=plot(mean(data(data(:,2)==0,3:end)),'o-','MarkerSize',8);
                 hc.LineWidth=1.5;
                 hc.Color=zGetColor('b1');
                 h=errorbar(1:size(data,2)-2,mean(data(data(:,2)==0,3:end)),std(data(data(:,2)==0,3:end))/sqrt(n-pos),'.');
                 h.LineWidth=1;
                 h.Color=zGetColor('b1');
+                
                 hop=plot(mean(data(data(:,2)==1,3:end)),'bo-','MarkerSize',8);
                 hop.LineWidth=1.5;
                 hop.Color=zGetColor('b1');
@@ -56,8 +59,8 @@ classdef plotLearn < handle
                 
                 ylabel(plotTitle,'FontSize',12,'Color','k');
                 
-                h=legend([hc hop],{sprintf('Ctrl n = %d',sum(~perf(:,2))),sprintf('VGAT-ChR2 n = %d',sum(perf(:,2)))});
-                h.FontSize=10;
+%                 h=legend([hc hop],{sprintf('Ctrl n = %d',sum(~perf(:,2))),sprintf('VGAT-ChR2 n = %d',sum(perf(:,2)))});
+%                 h.FontSize=10;
                 
                 obj.figs=[obj.figs,hf];
                 obj.fileTags=[obj.fileTags,fileTag];

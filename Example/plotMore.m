@@ -1,3 +1,4 @@
+fs=z.listFiles({'2','-mW','-Hz','-Odor','-Shap','-8s','-LR'});
 for i=length(fs):-1:1
     cf=char(fs(i));
     z.processLickFile(cf);

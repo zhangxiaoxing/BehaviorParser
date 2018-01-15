@@ -1,11 +1,11 @@
-function plotExample(licks,strTitle)
+function plotExample(licks,fIdx)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
 nm=licks(licks(:,3)<2,:);
 match=licks(licks(:,3)>1,:);
 
-figure('Color','w','Position',[100 100 320 185]);
+figure('Color','w','Position',[100 100 340 145]);
 hold on;
 subplot('Position',[0.08,0.17,0.4,0.8]);
 plotOne(nm);
@@ -26,10 +26,11 @@ h2a=hel2arial.Hel2arial;
 % end
 
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-painters','lick.eps')%,'-cmyk');
+    print('-depsc','-painters',[pwd,'\lick',num2str(fIdx),'.eps'])%,'-cmyk');
 %         close gcf;
-    h2a.h2a([pwd,'\lick.eps']);
-
+    h2a.h2a([pwd,'\lick',num2str(fIdx),'.eps']);
+%     print('-dpng','-painters',['lickExample',num2str(fIdx),'.png']);
+    
     function plotOne(data)
         hold on;
         if data(1,3)<2
@@ -56,7 +57,7 @@ h2a=hel2arial.Hel2arial;
         h.FontSize=10;
         h.FontName='Helvetica';
         
-        xl=xlabel('Time ( sec )','FontSize',10,'FontName','Helvetica');
+        xl=xlabel('Time (s)','FontSize',10,'FontName','Helvetica');
 %         yl=ylabel('Trial No.','FontSize',12,'FontName','Helvetica');
         ax=gca;
         

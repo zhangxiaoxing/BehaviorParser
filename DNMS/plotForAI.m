@@ -12,10 +12,11 @@ h2a=hel2arial.Hel2arial;
 % data=load('newPir.mat');
 % chr2=data.chr2;
 chr2=data;
-tasks={'delay5s','delay8s','delay12s','firstOdor','secondOdor','bothOdor','baseline','responseDelay','gonogo'};
+% tasks={'delay5s','delay8s','delay12s','firstOdor','secondOdor','bothOdor','baseline','responseDelay','gonogo'};
 % tasks={'delay5s','delay8s','delay12s','delay16s','delay20s'};
 % tasks={'firstOdor','secondOdor','responseDelay'};
-% tasks={'gonogo'};
+% tasks={'delay12s','delay8s','delay5s','baseline','gonogo'};%
+tasks={'delay5s'};
 
 measureTags={'p','f','m','d','l'};
 % measureTags={'p','f'};

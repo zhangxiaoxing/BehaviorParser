@@ -1,5 +1,6 @@
 function out=getLicks(type)
 % javaaddpath('I:\java\zmat\build\classes\');
+javaaddpath('I:\java\zmat\build\classes\')
 z=zmat.Zmat;
 load('lickFiles.mat');
 z.setMinLick(0);
