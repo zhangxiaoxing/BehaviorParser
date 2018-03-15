@@ -23,9 +23,10 @@ savePlots();
 
     function hd=plotDPA(data)
         
-        hd=plot((1:dpaDay)*288-144,mean(data(:,3:end)),'ko-','LineWidth',1);
+        hIndi=plot((1:dpaDay)*288-144,data(:,3:end),'-k.','Color',[0.8,0.8,0.8]);
+        hd=plot((1:dpaDay)*288-144,mean(data(:,3:end)),'-k.','MarkerSize',6,'LineWidth',2);
         
-        h=errorbar((1:dpaDay)*288-144,mean(data(:,3:end)),std(data(:,3:end))/sqrt(n),'k.','LineWidth',1);
+%         h=errorbar((1:dpaDay)*288-144,mean(data(:,3:end)),std(data(:,3:end))/sqrt(n),'k.','LineWidth',1);
         
         %         xlim([0.5,5.5]);
         %         set(gca,'XTick',1:5,'FontSize',10,'XColor','k','YColor','k');
@@ -62,11 +63,11 @@ savePlots();
             javaaddpath('I:\java\hel2arial\build\classes\');
         end
         
-        h2a=hel2arial.Hel2arial;
+        %         h2a=hel2arial.Hel2arial;
         
         set(hf,'PaperPositionMode','auto');
         print(hf,'-depsc','dpa_dual_learning.eps','-cmyk');
         %                 close(obj.figs(i)) ;
-        h2a.h2a(sprintf('%s\\dpa_dual_learning.eps',pwd));
+        %         h2a.h2a(sprintf('%s\\dpa_dual_learning.eps',pwd));
     end
 end
