@@ -13,7 +13,7 @@ perf=nan(n,size(files,2));
 perf(:,1)=str2num(char(regexp(ids,'\d*','match','once')));
 perf(:,2)=ismember(ids,optoPos);
 
-false=perf;
+falseMat=perf;
 miss=perf;
 dpc=perf;
 lickEff=perf;
@@ -28,7 +28,6 @@ for mouse=1:size(files,1)
     for date=3:size(files,2)+2
         
         z.processFile(files{mouse,date-2});
-        
         tOn=double(sum(z.getPerf(0,1,0)));
         
         if numel(tOn)<11
@@ -39,7 +38,7 @@ for mouse=1:size(files,1)
             mss=tOn(2)*100/(tOn(1)+tOn(2));
             
             perf(mouse,date)=(tOn(1)+tOn(4))*100/tOn(5);
-            false(mouse,date)=fas;
+            falseMat(mouse,date)=fas;
             miss(mouse,date)=mss;
             dpc(mouse,date)=calcDpc(fas,mss);
             lickEff(mouse,date)=tOn(6)*100/(tOn(6)+tOn(7));
@@ -55,7 +54,7 @@ for mouse=1:size(files,1)
 end
 
 out.perf=perf;
-out.false=false;
+out.false=falseMat;
 out.miss=miss;
 out.dpc=dpc;
 out.lickEff=lickEff;

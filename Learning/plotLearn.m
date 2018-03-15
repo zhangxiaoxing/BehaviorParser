@@ -39,28 +39,22 @@ classdef plotLearn < handle
                 hold on;
                 plot(data(data(:,2)==0,3:end)','-','Color',[0.4,0.4,0.4]);
                 plot(data(data(:,2)==1,3:end)','-','Color',[0.6,0.6,1]);
-                hc=plot(mean(data(data(:,2)==0,3:end)),'-bo','MarkerSize',8);
-                hc.LineWidth=1.5;
-                hc.Color='b';
-                h=errorbar(1:size(data,2)-2,mean(data(data(:,2)==0,3:end)),std(data(data(:,2)==0,3:end))/sqrt(n-pos),'.');
-                h.LineWidth=1;
-                h.Color='b';
+                hc=plot(mean(data(data(:,2)==0,3:end)),'-ko','LineWidth',2,'MarkerSize',4,'MarkerFaceColor','k');
+                ci=bootci(100,@(x) mean(x),data(data(:,2)==0,3:end))-mean(data(data(:,2)==0,3:end));
+                errorbar(1:size(data,2)-2,mean(data(data(:,2)==0,3:end)),ci(1,:),ci(2,:),'k.','LineWidth',1);
                 
-                hop=plot(mean(data(data(:,2)==1,3:end)),'bo-','MarkerSize',8);
-                hop.LineWidth=1.5;
-                hop.Color='b';
-                hop.MarkerFaceColor='b';
-                h=errorbar(1:size(data,2)-2,mean(data(data(:,2)==1,3:end)),std(data(data(:,2)==1,3:end))/sqrt(pos),'b.');
-                h.Color='b';
-                h.LineWidth=1;
+                hop=plot(mean(data(data(:,2)==1,3:end)),'bo-','MarkerSize',3,'LineWidth',2,'MarkerSize',4,'MarkerFaceColor','b');
+               
+                ci=bootci(100,@(x) mean(x),data(data(:,2)==1,3:end))-mean(data(data(:,2)==1,3:end));
+                errorbar(1:size(data,2)-2,mean(data(data(:,2)==1,3:end)),ci(1,:),ci(2,:),'b.','LineWidth',1);
+
                 xlim([0.5,5.5]);
-                set(gca,'XTick',1:5,'FontSize',12,'XColor','k','YColor','k','YTick',[50,75,100]);
-                xlabel('Day','Color','k','FontSize',12);
+                set(gca,'XTick',1:5,'XColor','k','YColor','k','YTick',[50,75,100]);
+                xlabel('Day (100 trials / day)','Color','k');
+                ylabel(plotTitle,'Color','k');
                 
-                ylabel(plotTitle,'FontSize',12,'Color','k');
-                
-%                 h=legend([hc hop],{sprintf('Ctrl n = %d',sum(~perf(:,2))),sprintf('VGAT-ChR2 n = %d',sum(perf(:,2)))});
-%                 h.FontSize=10;
+                h=legend([hc hop],{sprintf('Ctrl n = %d',sum(~perf(:,2))),sprintf('VGAT-ChR2 n = %d',sum(perf(:,2)))});
+                h.FontSize=10;
                 
                 obj.figs=[obj.figs,hf];
                 obj.fileTags=[obj.fileTags,fileTag];
@@ -71,17 +65,10 @@ classdef plotLearn < handle
         end
         
         function savePlots(obj)
-            dpath=javaclasspath('-dynamic');
-            if ~ismember('I:\java\hel2arial\build\classes\',dpath)
-                javaaddpath('I:\java\hel2arial\build\classes\');
-            end
-            
-%             h2a=hel2arial.Hel2arial;
+
             for i=1:length(obj.figs)
                 set(obj.figs(i),'PaperPositionMode','auto');
-                print(obj.figs(i),'-depsc',sprintf('DNMSLearn%s.eps',obj.fileTags(i)),'-cmyk');
-%                 close(obj.figs(i)) ;
-%                 h2a.h2a(sprintf('%s\\DNMSLearn%s.eps',pwd,obj.fileTags(i)));
+                print(obj.figs(i),'-depsc',sprintf('DNMSLearn%s.eps',obj.fileTags(i)));
             end
         end
     end
