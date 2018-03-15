@@ -1,4 +1,4 @@
-function results=stats(files,fullSessione)
+function results=stats(files,fullSession)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -35,8 +35,8 @@ for mice=1:length(ids)
 %     tOn=double(sum(z.getPerf(true,50)));  
 %     tOff=double(sum(z.getPerf(false,50))); 
 
-    tOn=double(sum(z.getPerf(true,0)));  
-    tOff=double(sum(z.getPerf(false,0))); 
+    tOn=double(sum(z.getPerf(true,0,false)));  
+    tOff=double(sum(z.getPerf(false,0,false))); 
     
     if tOn(5)>0
         crs=(tOn(1)+tOn(4))*100/tOn(5);

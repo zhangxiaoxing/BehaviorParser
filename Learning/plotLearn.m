@@ -10,7 +10,7 @@ classdef plotLearn < handle
             obj.figs=[];
             obj.fileTags=[];
             dx=100;
-            fw=360;
+            fw=350;
             path(path,'D:\behavior\reports\z');
             perf=data.perf;
             false=data.false;
@@ -21,11 +21,11 @@ classdef plotLearn < handle
             n=size(perf,1);
             pos=sum(perf(:,2));
             
-            plotLearning(perf,'Performance','p');
-            plotLearning(false,'False Choice','f');
-            plotLearning(miss,'Miss','m');
-            plotLearning(dpc,'\it d''','d');
-            plotLearning(lickEff,'Lick Efficiency','l');
+            plotLearning(perf,'Correct rate','p');
+%             plotLearning(false,'False Choice','f');
+%             plotLearning(miss,'Miss','m');
+%             plotLearning(dpc,'\it d''','d');
+%             plotLearning(lickEff,'Lick Efficiency','l');
             
             if any(strcmp('distPerf',fieldnames(data)))
                 plotLearning(data.distPerf,'GNG Performance','dp');
@@ -39,22 +39,22 @@ classdef plotLearn < handle
                 hold on;
                 plot(data(data(:,2)==0,3:end)','-','Color',[0.4,0.4,0.4]);
                 plot(data(data(:,2)==1,3:end)','-','Color',[0.6,0.6,1]);
-                hc=plot(mean(data(data(:,2)==0,3:end)),'o-','MarkerSize',8);
+                hc=plot(mean(data(data(:,2)==0,3:end)),'-bo','MarkerSize',8);
                 hc.LineWidth=1.5;
-                hc.Color=zGetColor('b1');
+                hc.Color='b';
                 h=errorbar(1:size(data,2)-2,mean(data(data(:,2)==0,3:end)),std(data(data(:,2)==0,3:end))/sqrt(n-pos),'.');
                 h.LineWidth=1;
-                h.Color=zGetColor('b1');
+                h.Color='b';
                 
                 hop=plot(mean(data(data(:,2)==1,3:end)),'bo-','MarkerSize',8);
                 hop.LineWidth=1.5;
-                hop.Color=zGetColor('b1');
-                hop.MarkerFaceColor=zGetColor('b1');
+                hop.Color='b';
+                hop.MarkerFaceColor='b';
                 h=errorbar(1:size(data,2)-2,mean(data(data(:,2)==1,3:end)),std(data(data(:,2)==1,3:end))/sqrt(pos),'b.');
-                h.Color=zGetColor('b1');
+                h.Color='b';
                 h.LineWidth=1;
                 xlim([0.5,5.5]);
-                set(gca,'XTick',1:5,'FontSize',10,'XColor','k','YColor','k');
+                set(gca,'XTick',1:5,'FontSize',12,'XColor','k','YColor','k','YTick',[50,75,100]);
                 xlabel('Day','Color','k','FontSize',12);
                 
                 ylabel(plotTitle,'FontSize',12,'Color','k');
@@ -76,12 +76,12 @@ classdef plotLearn < handle
                 javaaddpath('I:\java\hel2arial\build\classes\');
             end
             
-            h2a=hel2arial.Hel2arial;
+%             h2a=hel2arial.Hel2arial;
             for i=1:length(obj.figs)
                 set(obj.figs(i),'PaperPositionMode','auto');
                 print(obj.figs(i),'-depsc',sprintf('DNMSLearn%s.eps',obj.fileTags(i)),'-cmyk');
 %                 close(obj.figs(i)) ;
-                h2a.h2a(sprintf('%s\\DNMSLearn%s.eps',pwd,obj.fileTags(i)));
+%                 h2a.h2a(sprintf('%s\\DNMSLearn%s.eps',pwd,obj.fileTags(i)));
             end
         end
     end

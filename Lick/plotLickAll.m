@@ -67,21 +67,24 @@ plotOne(miceAverage.crLaser,miceAverage.crNone,'cr');
 
 
     function plotOne(laserOn,laserOff,fname)
-        fh=figure('Color','w','Position',[100,100,375,250]);
+        fh=figure('Color','w','Position',[100,100,180,160]);
         hold on;
-        plot(laserOff','Color',[0.75,0.75,0.75],'LineStyle','-');
+%         plot(laserOff','Color',[0.75,0.75,0.75],'LineStyle','-');
+        ci=bootci(100,@(x) mean(x),laserOff);
+        fill([1:length(ci),length(ci):-1:1],[ci(1,:),flip(ci(2,:))],[0.5,0.5,0.5],'EdgeColor','none');
+        
 %         plot(laserOn','Color',[0.85,0.85,1],'LineStyle','-');
         plot(mean(laserOff),'-k','LineWidth',1);
 %         plot(mean(laserOn),'-b','LineWidth',1);
-        set(gca,'XTick',(binW/200):(1000/binW*5):length(lickBin),'XTickLabel',0:5:length(lickBin)/(1000/binW),'FontSize',12);
+        set(gca,'XTick',(binW/200):(1000/binW*5):length(lickBin),'XTickLabel',0:5:length(lickBin)/(1000/binW),'FontSize',10);
         delta=delay-5;
 %         plot(repmat([2.5,4.5,14.5,16.5,18.5,19.5]+[0,0,ones(1,4).*delta.*2],2,1),[zeros(1,6);ones(1,6).*10],':k');
         plot(repmat([2.5,4.5,14.5,16.5,18.5,19.5]+[0,0,ones(1,4).*delta.*2],2,1).*(500./binW),[zeros(1,6);ones(1,6).*10],':k');
-        xlabel('Time (s)','FontSize',12);
-        ylabel('Lick (Hz)','FontSize',12);
-        text(5,5,sprintf('n = %d',size(laserOn,1)),'FontSize',12);
+        xlabel('Time (s)','FontSize',10);
+        ylabel('Lick (Hz)','FontSize',10);
+        text(5,5,sprintf('n = %d',size(laserOn,1)),'FontSize',10);
         xlim([0.5,length(lickBin)-0.5]);
-        ylim([0,6]);
+        ylim([0,4]);
         savefig(fh,sprintf('%ds_%s_lick.fig',delay,fname));
         set(fh,'PaperPositionMode','auto');
         print(fh,sprintf('%ds_%s_lick.eps',delay,fname),'-depsc','-cmyk');

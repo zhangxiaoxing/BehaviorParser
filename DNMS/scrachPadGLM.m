@@ -210,7 +210,7 @@ modelMat=[1 0 0 0;
     0 1 0 0;
     0 0 1 0;
     0 0 0 1;
-    1 1 0 1];
+    1 1 1 1];
     
 anovan(toN(:,1),{toN(:,2),toN(:,3),toN(:,4),toN(:,5)},'model',modelMat,'continuous',3, 'varnames',{'Gene','Laser','DelayLen','PurtType'});
 
@@ -324,3 +324,38 @@ allTrialsBoth=fillIn(allTrialsBoth,[5 5]);
 allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsSample;allTrialsTest;allTrialsBoth];
 
 
+
+
+
+
+close all;
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,450,180]);
+hold on;
+randd=@(x) rand(size(x,1),1)*0.5-0.25;
+plot(([4,3]+1+randd(perf5(perf5(:,3)==1)))',perf5(perf5(:,3)==1,1:2)','b.-');
+plot(([2,1]+randd(perf5(perf5(:,3)==0)))',perf5(perf5(:,3)==0,1:2)','k.-');
+
+plot(([6,5]+2+randd(perf8(perf8(:,3)==1)))',perf8(perf8(:,3)==1,1:2)','b.-');
+plot(([8,7]+3+randd(perf12(perf12(:,3)==1)))',perf12(perf12(:,3)==1,1:2)','b.-');
+
+plot(([10,9]+4+randd(perfBase(perfBase(:,3)==1)))',perfBase(perfBase(:,3)==1,1:2)','b.-');
+xlim([0,15]);
+ylim([55,100]);
+set(gca,'YTick',60:20:100);
+
+rpp=ranksum(perfn(perfn(:,3)==1,1),perfn(perfn(:,3)==1,2));
+[~,pp]=ttest(perfn(perfn(:,3)==1,1),perfn(perfn(:,3)==1,2));
+rpm=ranksum(perfn(perfn(:,3)==1,4),perfn(perfn(:,3)==1,5));
+[~,pm]=ttest(perfn(perfn(:,3)==1,4),perfn(perfn(:,3)==1,5));
+rpf=ranksum(perfn(perfn(:,3)==1,6),perfn(perfn(:,3)==1,7));
+[~,pf]=ttest(perfn(perfn(:,3)==1,6),perfn(perfn(:,3)==1,7));
+
+fprintf('TransGene, %.2f, %.2f | %.2f, %.2f | %.2f, %.2f | \n',rpp,pp,rpm,pm,rpf,pf);
+rpp=ranksum(perfn(perfn(:,3)==0,1),perfn(perfn(:,3)==0,2));
+[~,pp]=ttest(perfn(perfn(:,3)==0,1),perfn(perfn(:,3)==0,2));
+rpm=ranksum(perfn(perfn(:,3)==0,4),perfn(perfn(:,3)==0,5));
+[~,pm]=ttest(perfn(perfn(:,3)==0,4),perfn(perfn(:,3)==0,5));
+rpf=ranksum(perfn(perfn(:,3)==0,6),perfn(perfn(:,3)==0,7));
+[~,pf]=ttest(perfn(perfn(:,3)==0,6),perfn(perfn(:,3)==0,7));
+fprintf('Ctrl, %.2f, %.2f | %.2f, %.2f | %.2f, %.2f | \t',rpp,pp,rpm,pm,rpf,pf);
