@@ -27,6 +27,10 @@ allTrialsBoth=fillIn(allTrialsBoth,[decay(5) 0 0 1 1 2]);
 
 allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsSample;allTrialsTest;allTrialsBoth];
 
+matchOdor=@(x,y) ismember(x,[2 5 7])==ismember(y,[2 5 7]);
+
+allTrials(:,end)=matchOdor(allTrials(:,1),allTrials(:,2));
+
 factors=cell(1,size(allTrials,2));
 for i=1:length(factors)
     factors{i}=unique(allTrials(:,i))';
@@ -66,9 +70,8 @@ end
 
 termsMat=[0 0 0 0 0  0  0  0  0  0  0;
           1 0 0 0 0  0  0  0  0  0  0;
-%           1 0 0 0 1  0  0  0  0  0  0;t
           0 1 0 0 0  0  0  0  0  0  0;
-          1 1 0 0 0  0  0  0  0  0  0;
+          0 0 0 0 0  0  0  0  0  1  0;
           0 0 1 0 0  0  0  0  0  0  0;
           0 0 0 1 0  0  0  0  0  0  0;
           0 0 0 0 1  0  0  0  0  0  0;
@@ -76,35 +79,21 @@ termsMat=[0 0 0 0 0  0  0  0  0  0  0;
           0 0 0 0 0  0  1  0  0  0  0;
           0 0 0 0 0  0  0  1  0  0  0;
           0 0 0 0 0  0  0  0  1  0  0;
-          0 0 1 1 0  0  0  0  0  0  0;
-          
-          0 0 1 0 0  1  0  0  0  0  0;
-          0 0 1 0 0  0  1  0  0  0  0;
-          0 0 1 0 0  0  0  1  0  0  0;
-          0 0 1 0 0  0  0  0  1  0  0;
-          
-          0 0 0 1 0  1  0  0  0  0  0;
-          0 0 0 1 0  0  1  0  0  0  0;
-          0 0 0 1 0  0  0  1  0  0  0;
-          0 0 0 1 0  0  0  0  1  0  0;
-          
-          
-          
+         
           0 0 1 1 1  1  0  0  0  0  0;
           0 0 1 1 0  0  1  0  0  0  0;
           0 0 1 1 0  0  0  1  0  0  0;
           0 0 1 1 0  0  0  0  1  0  0;
-          0 0 1 1 0  0  0  1  1  0  0;
-          0 0 1 1 0  0  0  1  1  0  0    ];
+          ];
       
 
 y=double(dataMat(:,1));
-X=double(dataMat(:,4:12));
+X=double(dataMat(:,4:13));
 % X=double(allTrials(:,1:3));
 
 
-mdl=fitglm(X,y,termsMat(:,1:end-1),'Categorical',[1:4,6:9],'Distribution','normal',...
-     'VarNames',{'Sample','Test','Laser','Genotype','Memory_decay','Perturb_Delay','Perturb_Baseline','Perturb_Sample','Perturb_Test','Correct_rate'});
+mdl=fitglm(X,y,termsMat,'Categorical',[1:4,6:10],'Distribution','normal',...
+     'VarNames',{'Sample','Test','Laser','Genotype','Memory_decay','Perturb_Delay','Perturb_Baseline','Perturb_Sample','Perturb_Test','Match','Correct_rate'});
 
 disp(mdl);
 % disp(mdl.Rsquared);
