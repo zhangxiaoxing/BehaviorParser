@@ -1,16 +1,15 @@
 load dnmsfiles.mat
-[allTrials5,perf5]=stats_GLM(dnmsfiles.delay5s);
-[allTrials8,perf8]=stats_GLM(dnmsfiles.delay8s);
-[allTrials12,perf12]=stats_GLM(dnmsfiles.delay12s);
-[allTrialsBase,perfBase]=stats_GLM(dnmsfiles.baseline);
-[allTrialsSample,perfSample]=stats_GLM(dnmsfiles.firstOdor);
-[allTrialsTest,perfTest]=stats_GLM(dnmsfiles.secondOdor);
-[allTrialsBoth,perfBoth]=stats_GLM(dnmsfiles.bothOdor);
-% 
+% [allTrials5,perf5]=stats_GLM(dnmsfiles.delay5s);
+% [allTrials8,perf8]=stats_GLM(dnmsfiles.delay8s);
+% [allTrials12,perf12]=stats_GLM(dnmsfiles.delay12s);
+% [allTrialsBase,perfBase]=stats_GLM(dnmsfiles.baseline);
+% [allTrialsSample,perfSample]=stats_GLM(dnmsfiles.firstOdor);
+% [allTrialsTest,perfTest]=stats_GLM(dnmsfiles.secondOdor);
+% [allTrialsBoth,perfBoth]=stats_GLM(dnmsfiles.bothOdor);
+
 % [allTrialsGNG,perfGNG]=stats_GLM(dnmsfiles.gonogo);
-% [allTrialsGNG,perfNodelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
-
-
+% [allTrialsNDelay,perfNDelay]=stats_GLM(chr2.dnms.baselineNDelay);
+% [allTrialsNDelay,perfNDelay]=stats_GLM(chr2.dnms.baselineNDelay);
 
 
 
@@ -26,8 +25,7 @@ allTrialsSample=fillIn(allTrialsSample,[decay(5) 0 0 1 0 1]);
 allTrialsTest=fillIn(allTrialsTest,[decay(5) 0 0 0 1 1]);
 allTrialsBoth=fillIn(allTrialsBoth,[decay(5) 0 0 1 1 2]);
 
-% allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsSample;allTrialsTest;allTrialsBoth];
-allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase];
+allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsSample;allTrialsTest;allTrialsBoth];
 
 factors=cell(1,size(allTrials,2));
 for i=1:length(factors)
@@ -78,11 +76,27 @@ termsMat=[0 0 0 0 0  0  0  0  0  0  0;
           0 0 0 0 0  0  1  0  0  0  0;
           0 0 0 0 0  0  0  1  0  0  0;
           0 0 0 0 0  0  0  0  1  0  0;
+          0 0 1 1 0  0  0  0  0  0  0;
+          
+          0 0 1 0 0  1  0  0  0  0  0;
+          0 0 1 0 0  0  1  0  0  0  0;
+          0 0 1 0 0  0  0  1  0  0  0;
+          0 0 1 0 0  0  0  0  1  0  0;
+          
+          0 0 0 1 0  1  0  0  0  0  0;
+          0 0 0 1 0  0  1  0  0  0  0;
+          0 0 0 1 0  0  0  1  0  0  0;
+          0 0 0 1 0  0  0  0  1  0  0;
+          
+          
           
           0 0 1 1 1  1  0  0  0  0  0;
           0 0 1 1 0  0  1  0  0  0  0;
           0 0 1 1 0  0  0  1  0  0  0;
-          0 0 1 1 0  0  0  0  1  0  0];
+          0 0 1 1 0  0  0  0  1  0  0;
+          0 0 1 1 0  0  0  1  1  0  0;
+          0 0 1 1 0  0  0  1  1  0  0    ];
+      
 
 y=double(dataMat(:,1));
 X=double(dataMat(:,4:12));
@@ -104,7 +118,7 @@ fill([1:length(dataMat),length(dataMat):-1:1],[dataMat(sortIdx,2);flip(dataMat(s
 phe=plot(dataMat(sortIdx,1),'-r.','LineWidth',1);
 phm=plot(mdl.Fitted.Response(sortIdx),'ko','LineWidth',1,'MarkerSize',3);
 xlim([1,length(dataMat)]);
-ylim([70,100]);
+ylim([60,100]);
 text(min(xlim),max(ylim),sprintf('r^2 = %0.3f',mdl.Rsquared.Ordinary),'FontSize',10);
 legend([phe,phm],{'Mice','GLM'},'FontSize',10);
 set(gca,'Xtick',[],'YTick',70:10:100,'FontSize',10);
