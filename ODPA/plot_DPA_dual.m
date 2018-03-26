@@ -1,22 +1,25 @@
 
-function plot_DPA_dual(infiles,outfile)
+function perfDPA=plot_DPA_dual(infiles,outfile)
 % [~,perfDPA]=stats_New_Cri(ODPAfiles.DPA_delay_laser);
 [~,perfDPA]=stats_New_Cri(infiles);
 
 close all;
 set(groot,'DefaultLineLineWidth',1);
-figure('Color','w','Position',[100,100,180,180]);
+% figure('Color','w','Position',[100,100,150,180]);
+figure('Color','w','Position',[100,100,150,150]);
 hold on;
 plotOne([2,1],perfDPA(perfDPA(:,3)==0,1:2),'k');
 plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,1:2),'b');
 
 
 xlim([0,6]);
-ylim([55,100]);
+% ylim([55,100]);
+ylim([65,100]);
 
 % plot([12,12],ylim(),':k','LineWidth',1);
 
-set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
+% set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
+set(gca,'YTick',70:10:100,'XTick',[1 2 4 5],'XTickLabel',[]);
 savefig([outfile,'.fig']);
 print([outfile,'.eps'],'-depsc','-r0');
 

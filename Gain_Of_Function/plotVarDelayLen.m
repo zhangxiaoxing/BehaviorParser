@@ -28,7 +28,7 @@ for mIdx=1%:length(measure)
     [fitM,gof]=fit(fitData(:,1),(fitData(:,2)),ft,'StartPoint',[-0.5,50],'Upper',[0,50]);
     
     
-    figure('Color','w','Position',[mIdx*400+100,100,150,240]);
+    figure('Color','w','Position',[mIdx*400+100,100,350,240]);
     hold on;
     
 %     errorbar(lenX,meandata,semdata,'k.');

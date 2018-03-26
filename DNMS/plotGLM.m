@@ -6,6 +6,12 @@ load dnmsfiles.mat
 [allTrialsSample,perfSample]=stats_GLM(dnmsfiles.firstOdor);
 [allTrialsTest,perfTest]=stats_GLM(dnmsfiles.secondOdor);
 [allTrialsBoth,perfBoth]=stats_GLM(dnmsfiles.bothOdor);
+% 
+% [allTrialsGNG,perfGNG]=stats_GLM(dnmsfiles.gonogo);
+% [allTrialsGNG,perfNodelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
+
+
+
 
 
 fillIn=@(x,y) [x(:,1:8),repmat(y,size(x,1),1)];
@@ -20,7 +26,8 @@ allTrialsSample=fillIn(allTrialsSample,[decay(5) 0 0 1 0 1]);
 allTrialsTest=fillIn(allTrialsTest,[decay(5) 0 0 0 1 1]);
 allTrialsBoth=fillIn(allTrialsBoth,[decay(5) 0 0 1 1 2]);
 
-allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsSample;allTrialsTest;allTrialsBoth];
+% allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsSample;allTrialsTest;allTrialsBoth];
+allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase];
 
 factors=cell(1,size(allTrials,2));
 for i=1:length(factors)
@@ -61,7 +68,7 @@ end
 
 termsMat=[0 0 0 0 0  0  0  0  0  0  0;
           1 0 0 0 0  0  0  0  0  0  0;
-%           1 0 0 0 1  0  0  0  0  0  0;
+%           1 0 0 0 1  0  0  0  0  0  0;t
           0 1 0 0 0  0  0  0  0  0  0;
           1 1 0 0 0  0  0  0  0  0  0;
           0 0 1 0 0  0  0  0  0  0  0;
@@ -72,10 +79,6 @@ termsMat=[0 0 0 0 0  0  0  0  0  0  0;
           0 0 0 0 0  0  0  1  0  0  0;
           0 0 0 0 0  0  0  0  1  0  0;
           
-%           0 0 0 1 0  1  0  0  0  0  0;
-%           0 0 0 1 0  0  1  0  0  0  0;
-%           0 0 0 1 0  0  0  1  0  0  0;
-%           0 0 0 1 0  0  0  0  1  0  0;
           0 0 1 1 1  1  0  0  0  0  0;
           0 0 1 1 0  0  1  0  0  0  0;
           0 0 1 1 0  0  0  1  0  0  0;
@@ -134,5 +137,6 @@ legend([hs,hdl,hldl],{'Sample 1','Delay Duration','Pertubation x delay duration'
 save('GLMPredictor.fig');
 print('GLMPredictor.eps','-deps','-r0');
 % set(gcf,'Position',[1800,500,140,235])
+
 
 

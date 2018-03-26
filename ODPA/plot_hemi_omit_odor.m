@@ -1,22 +1,25 @@
 
-function plot_DPA_dual(infiles,outfile)
+function perfDPA=plot_hemi_omit_odor(infiles,outfile)
 % [~,perfDPA]=stats_New_Cri(ODPAfiles.DPA_delay_laser);
 [~,perfDPA]=stats_New_Cri(infiles);
 
 close all;
 set(groot,'DefaultLineLineWidth',1);
-figure('Color','w','Position',[100,100,180,180]);
+% figure('Color','w','Position',[100,100,150,180]);
+figure('Color','w','Position',[100,100,150,150]);
 hold on;
 plotOne([2,1],perfDPA(perfDPA(:,3)==0,1:2),'k');
 plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,1:2),'b');
 
 
 xlim([0,6]);
-ylim([55,100]);
+% ylim([55,100]);
+ylim([65,100]);
 
 % plot([12,12],ylim(),':k','LineWidth',1);
 
-set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
+% set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
+set(gca,'YTick',70:10:100,'XTick',[1 2 4 5],'XTickLabel',[]);
 savefig([outfile,'.fig']);
 print([outfile,'.eps'],'-depsc','-r0');
 
@@ -50,11 +53,11 @@ for i=1:length(files)
 end
 
 
-optoPos={'D10','D9','D8','D4','D11','D12','D3','D220','D214','D216', 'D219', 'D221', 'D215'};
+optoPos={'S1','S5','S6','S12','S16','S24','S32','S31','S33','S34'};
 
 
 
-z=zmat.ZmatDual();
+z=zmat.Zmat();
 allTrial=[];
 perMice=[];
 for mice=1:length(ids)
@@ -62,24 +65,17 @@ for mice=1:length(ids)
     f=getMiceFile(ids{mice});
     if size(f,1)>0
         for fidx=1:size(f,1)
-            z.setFullSession(24);
+            z.setFullSession(20);
             z.processFile(strtrim(f(fidx,:)));
-            facSeq=z.getFactorSeq();
-            if numel(facSeq)<50
-                z.setFullSession(48);
-                z.processFile(strtrim(f(fidx,:)));
-                facSeq=z.getFactorSeq();
-                z.setFullSession(24);
-            end
-
+            facSeq=z.getFactorSeq(false);
 
 %             fprintf('%d, %s\n',numel(facSeq),f(fidx,:));
-            facSeq=clearBadPerf(facSeq);
+%             facSeq=clearBadPerf(facSeq);
             if length(facSeq)<50
                 continue;
             end
 
-
+%             facSeq(:,6)=facSeq(:,5);%Laser, 3 is catch
             facSeq(facSeq(:,4)==3 | facSeq(:,4)==5,5)=1;%lick
             facSeq(facSeq(:,4)==4 | facSeq(:,4)==6,5)=0;
 
