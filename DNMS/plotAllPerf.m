@@ -1,4 +1,4 @@
-
+% 
 % close all;
 % set(groot,'DefaultLineLineWidth',1);
 % figure('Color','w','Position',[100,100,450,180]);
@@ -7,24 +7,61 @@
 % plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
 % plotOne([6,5]+2,perf8(perf8(:,3)==1,1:2),'b');
 % plotOne([8,7]+3,perf12(perf12(:,3)==1,1:2),'b');
-% plotOne([10,9]+4,perfBase(perfBase(:,3)==1,1:2),'b');
+% % plotOne([10,9]+4,perfBase(perfBase(:,3)==1,1:2),'b');
 % 
 % set(gca,'XTick',[2 3 5 6 8 9 11 12]-1,'XTickLabel',{'off','on','off','on','off','on','off','on'});
 % 
 % xlim([0,12]);
 % ylim([55,100]);
 % 
-
+% 
+% set(groot,'DefaultLineLineWidth',1);
+% figure('Color','w','Position',[100,100,160,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==0,1:2),'k');
+% xlim([0,3]);
+% ylim([55,100]);
+% set(gca,'XTick',[2 3 5 6 8 9 11 12]-1,'XTickLabel',{'off','on'});
+% ylabel('Correct rate (%)');
+% 
+% figure('Color','w','Position',[100,100,160,180]);
+% hold on;
+% plotOne([2,1],perf12(perf12(:,3)==0,1:2),'k');
+% xlim([0,3]);
+% ylim([55,100]);
+% set(gca,'XTick',[2 3 5 6 8 9 11 12]-1,'XTickLabel',{'off','on'});
+% ylabel('Correct rate (%)');
+% 
+% disp('ranksum 5 8 12');
+% ranksum(diff(perf5(perf5(:,3)==0,1:2),1,2),diff(perf5(perf5(:,3)==1,1:2),1,2))
+% ranksum(diff(perf8(perf8(:,3)==0,1:2),1,2),diff(perf8(perf8(:,3)==1,1:2),1,2))
+% ranksum(diff(perf12(perf12(:,3)==0,1:2),1,2),diff(perf12(perf12(:,3)==1,1:2),1,2))
+% 
+% decay=@(x) 50-exp(-x/21.37)*50;
+% % decay=@(x) x;
+% 
+% n51=[perf5(:,1),perf5(:,3),ones(length(perf5),1),ones(length(perf5),1)*decay(5),perf5(:,8),ones(length(perf5),1)*1];
+% n50=[perf5(:,2),perf5(:,3),ones(length(perf5),1)*0,ones(length(perf5),1)*decay(5),perf5(:,8),ones(length(perf5),1)*2];
+% n81=[perf8(:,1),perf8(:,3),ones(length(perf8),1),ones(length(perf8),1)*decay(8),perf8(:,8),ones(length(perf8),1)*3];
+% n80=[perf8(:,2),perf8(:,3),ones(length(perf8),1)*0,ones(length(perf8),1)*decay(8),perf8(:,8),ones(length(perf8),1)*4];
+% n121=[perf12(:,1),perf12(:,3),ones(length(perf12),1),ones(length(perf12),1)*decay(12),perf12(:,8),ones(length(perf12),1)*5];
+% n120=[perf12(:,2),perf12(:,3),ones(length(perf12),1)*0,ones(length(perf12),1)*decay(12),perf12(:,8),ones(length(perf12),1)*6];
+% toN=[n51;n50;n81;n80;n121;n120];
+% 
+% anovan(toN(:,1),{toN(:,6)},'varnames',{'Group'});
+% 
+% 
+% return;
 
 %%%%%%%%%%%%%%%%%%%
 % Ctrl Op Supress %
 %%%%%%%%%%%%%%%%%%%
-% 
-% figure('Color','w','Position',[100,100,370,180]);
+
+% figure('Color','w','Position',[100,100,245,180]);
 % hold on;
 % plotOne([2,1]+1,perfBase(perfBase(:,3)==1,1:2),'b');
 % plotOne([4,3]+2,perfGNG(perfGNG(:,3)==1,1:2),'b');
-% plotOne([6,5]+3,perfNodelay(perfNodelay(:,3)==1,1:2),'b');
+% plotOne([6,5]+3,perfNoDelay(perfNoDelay(:,3)==1,1:2),'b');
 % ylabel('Correct rate (%)');
 % 
 % xlim([1,10]);
@@ -65,38 +102,252 @@
 % 12s false miss %
 %%%%%%%%%%%%%%%%%%
 
+% close all;
+% set(groot,'DefaultLineLineWidth',1);
+% figure('Color','w','Position',[100,100,150,180]);
+% hold on;
+% % yyaxis left;
+% % plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
+% % plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
+% % plotOne([6,5]+2,perf8(perf8(:,3)==1,1:2),'b');
+% plotOne([2,1],perf12(perf12(:,3)==1,4:5),'b');
+% plotOne([4,3]+1,perf12(perf12(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+% set(gca,'YColor','k');
+% xlim([0,6]);
+% % yyaxis right;
+% figure('Color','w','Position',[500,100,40,180]);
+% hold on;
+% plotOne([2,1]+1,norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[2,3],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% % plotOne([10,9]+4,perfBase(perfBase(:,3)==1,1:2),'b');
+% 
+% xlim([1,4]);
+% % ylim([0,70]);
+% 
+% [~,p12m]=ttest(perf12(perf12(:,3)==1,4),perf12(perf12(:,3)==1,5));
+% [~,p12f]=ttest(perf12(perf12(:,3)==1,6),perf12(perf12(:,3)==1,7));
+% 
+% 
+% 
+% 
+% figure('Color','w','Position',[1400,100,40,180]);
+% hold on;
+% plotOne([2,1]+1,perf12(perf12(:,3)==1,9:10),'b');
+% xlim([1,4]);
+% ylim([55,100]);
+% set(gca,'XTick',[2,3],'XTickLabel',{'off','on'});
+% return;
+
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 8s false miss %
+% %%%%%%%%%%%%%%%%%%
+% 
+% close all;
+% set(groot,'DefaultLineLineWidth',1);
+% 
+% figure('Color','w','Position',[100,100,160,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('Miss (%)');
+% 
+% 
+% figure('Color','w','Position',[300,100,160,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('False alarm (%)');
+% 
+% 
+% figure('Color','w','Position',[500,100,160,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('Sensitivity index(d'')');
+% 
+% 
+% 
+% [~,p12m]=ttest(perf8(perf8(:,3)==1,4),perf8(perf8(:,3)==1,5));
+% [~,p12f]=ttest(perf8(perf8(:,3)==1,6),perf8(perf8(:,3)==1,7));
+% 
+% 
+% 
+% 
+% figure('Color','w','Position',[700,100,160,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==1,9:10),'b');
+% xlim([1,4]);
+% % ylim([55,100]);
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% xlim([0,3]);
+% ylabel('Lick efficiency');
+% 
+% 
+% return;
+
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 5s false miss %
+% %%%%%%%%%%%%%%%%%%
+% 
+% close all;
+% set(groot,'DefaultLineLineWidth',1);
+% 
+% figure('Color','w','Position',[100,100,160,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('Miss (%)');
+% 
+% 
+% figure('Color','w','Position',[300,100,160,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('False alarm (%)');
+% 
+% 
+% figure('Color','w','Position',[500,100,160,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('Sensitivity index(d'')');
+% 
+% 
+% 
+% [~,p12m]=ttest(perf5(perf5(:,3)==1,4),perf5(perf5(:,3)==1,5));
+% [~,p12f]=ttest(perf5(perf5(:,3)==1,6),perf5(perf5(:,3)==1,7));
+% 
+% 
+% 
+% 
+% figure('Color','w','Position',[700,100,160,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==1,9:10),'b');
+% xlim([1,4]);
+% % ylim([55,100]);
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% xlim([0,3]);
+% ylabel('Lick efficiency');
+% 
+% 
+% return;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 5s false miss %
+%%%%%%%%%%%%%%%%%%
+
 close all;
 set(groot,'DefaultLineLineWidth',1);
-figure('Color','w','Position',[100,100,300,180]);
+
+figure('Color','w','Position',[100,100,160,180]);
 hold on;
-yyaxis left;
-% plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
-% plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
-% plotOne([6,5]+2,perf8(perf8(:,3)==1,1:2),'b');
-plotOne([2,1],perf12(perf12(:,3)==1,4:5),'b');
-plotOne([4,3]+1,perf12(perf12(:,3)==1,6:7),'b');
-yyaxis right;
-plotOne([6,5]+2,norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),'b');
-
-% plotOne([10,9]+4,perfBase(perfBase(:,3)==1,1:2),'b');
-
-xlim([0,9]);
-% ylim([0,70]);
-
-[~,p12m]=ttest(perf12(perf12(:,3)==1,4),perf12(perf12(:,3)==1,5));
-[~,p12f]=ttest(perf12(perf12(:,3)==1,6),perf12(perf12(:,3)==1,7));
-
-set(gca,'XTick',[1,2,4,5,7,8],'XTickLabel',{'off','on','off','on','off','on'});
+plotOne([2,1],perf5(perf5(:,3)==1,4:5),'b');
+set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+set(gca,'YColor','k');
+xlim([0,3]);
+ylabel('Miss (%)');
 
 
-% figure('Color','w','Position',[100,100,450,180]);
-% hold on;
-% plotOne([2,1]+1,perfBase(perfBase(:,3)==1,1:2),'b');
-% plotOne([4,3]+2,perfGNG(perfGNG(:,3)==1,1:2),'b');
-% 
-% xlim([1,7]);
+figure('Color','w','Position',[300,100,160,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==1,6:7),'b');
+set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+set(gca,'YColor','k');
+xlim([0,3]);
+ylabel('False alarm (%)');
+
+
+figure('Color','w','Position',[500,100,160,180]);
+hold on;
+plotOne([2,1],norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
+set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+set(gca,'YColor','k');
+xlim([0,3]);
+ylabel('Sensitivity index(d'')');
+
+
+
+[~,p12m]=ttest(perf5(perf5(:,3)==1,4),perf5(perf5(:,3)==1,5));
+[~,p12f]=ttest(perf5(perf5(:,3)==1,6),perf5(perf5(:,3)==1,7));
+
+
+
+
+figure('Color','w','Position',[700,100,160,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==1,9:10),'b');
+xlim([1,4]);
 % ylim([55,100]);
+set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+xlim([0,3]);
+ylabel('Lick efficiency');
+
+
 return;
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    DPA block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% close all;
+% set(groot,'DefaultLineLineWidth',1);
+% figure('Color','w','Position',[100,100,245,180]);
+% hold on;
+% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,1:2),'k');
+% plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,1:2),'b');
+% 
+% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+% ylim([55,100]);
+% xlim([0,6]);
+% ylabel('Correct rate (%)');
+% ah=gca();
+% ah.YAxis.Color='k';
+% print('DPAperf.eps','-depsc','-r0');
+% 
+% figure('Color','w','Position',[100,100,250,180]);
+% hold on;
+% yyaxis left;
+% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==1,4:5),'b');
+% plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,6:7),'b');
+% set(gca,'YTick',0:50:100);
+% yyaxis right;
+% plotOne([6,5]+2,norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),'b');
+% xlim([0,9]);
+% 
+% ah=gca();
+% ah.YAxis(1).Color='k';
+% ah.YAxis(2).Color='k';
+% set(gca,'XTick',[1,2,4,5,7,8],'XTickLabel',{'off','on','off','on','off','on'},'YTick',1:4);
+% ylim([1,4])
+% ylabel('Sensitivity index (d'')');
+% print('DPAMissFalse.eps','-depsc','-r0');
+% 
+% 
+% return;
+% 
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 12S miss false early late %
@@ -156,17 +407,17 @@ return;
 
 % plot([12,12],ylim(),':k','LineWidth',1);
 
-set(gca,'YTick',60:20:100,'XTick',[1 2 4 5 7 8 10 11 13 14],'XTickLabel',[]);
-savefig('OptoSupress.fig');
-
-[~,p5n]=ttest(perf5(perf5(:,3)==0,1),perf5(perf5(:,3)==0,2));
-[~,p5]=ttest(perf5(perf5(:,3)==1,1),perf5(perf5(:,3)==1,2));
-[~,p8]=ttest(perf8(perf8(:,3)==1,1),perf8(perf8(:,3)==1,2));
-[~,p12]=ttest(perf12(perf12(:,3)==1,1),perf12(perf12(:,3)==1,2));
-
-
-[~,pbase]=ttest(perfBase(perfBase(:,3)==1,1),perfBase(perfBase(:,3)==1,2));
-[~,pGNG]=ttest(perfGNG(perfGNG(:,3)==1,1),perfGNG(perfGNG(:,3)==1,2));
+% set(gca,'YTick',60:20:100,'XTick',[1 2 4 5 7 8 10 11 13 14],'XTickLabel',[]);
+% savefig('OptoSupress.fig');
+% 
+% [~,p5n]=ttest(perf5(perf5(:,3)==0,1),perf5(perf5(:,3)==0,2));
+% [~,p5]=ttest(perf5(perf5(:,3)==1,1),perf5(perf5(:,3)==1,2));
+% [~,p8]=ttest(perf8(perf8(:,3)==1,1),perf8(perf8(:,3)==1,2));
+% [~,p12]=ttest(perf12(perf12(:,3)==1,1),perf12(perf12(:,3)==1,2));
+% 
+% 
+% [~,pbase]=ttest(perfBase(perfBase(:,3)==1,1),perfBase(perfBase(:,3)==1,2));
+% [~,pGNG]=ttest(perfGNG(perfGNG(:,3)==1,1),perfGNG(perfGNG(:,3)==1,2));
 
 
 
@@ -201,21 +452,43 @@ load dnmsfiles.mat
 [~,perf12]=stats_GLM(dnmsfiles.delay12s);
 [~,perfBase]=stats_GLM(dnmsfiles.baseline);
 
+decay=@(x) 50-exp(-x/21.37)*50;
+% decay=@(x) x;
 
-n51=[perf5(:,1),perf5(:,3),ones(length(perf5),1),ones(length(perf5),1)*5,perf5(:,8)];
-n50=[perf5(:,2),perf5(:,3),ones(length(perf5),1)*0,ones(length(perf5),1)*5,perf5(:,8)];
-n81=[perf8(:,1),perf8(:,3),ones(length(perf8),1),ones(length(perf8),1)*8,perf8(:,8)];
-n80=[perf8(:,2),perf8(:,3),ones(length(perf8),1)*0,ones(length(perf8),1)*8,perf8(:,8)];
-n121=[perf12(:,1),perf12(:,3),ones(length(perf12),1),ones(length(perf12),1)*12,perf12(:,8)];
-n120=[perf12(:,2),perf12(:,3),ones(length(perf12),1)*0,ones(length(perf12),1)*12,perf12(:,8)];
+n51=[perf5(:,1),perf5(:,3),ones(length(perf5),1),ones(length(perf5),1)*decay(5),perf5(:,8)];
+n50=[perf5(:,2),perf5(:,3),ones(length(perf5),1)*0,ones(length(perf5),1)*decay(5),perf5(:,8)];
+n81=[perf8(:,1),perf8(:,3),ones(length(perf8),1),ones(length(perf8),1)*decay(8),perf8(:,8)];
+n80=[perf8(:,2),perf8(:,3),ones(length(perf8),1)*0,ones(length(perf8),1)*decay(8),perf8(:,8)];
+n121=[perf12(:,1),perf12(:,3),ones(length(perf12),1),ones(length(perf12),1)*decay(12),perf12(:,8)];
+n120=[perf12(:,2),perf12(:,3),ones(length(perf12),1)*0,ones(length(perf12),1)*decay(12),perf12(:,8)];
 toN=[n51;n50;n81;n80;n121;n120];
 terms=[1 0 0 ;
        0 1 0 ;
        0 0 1 ;
-       0 1 1 ;
        1 1 1 ];
 
 anovan(toN(:,1),{toN(:,2),toN(:,3),toN(:,4)},'model',terms,'continuous',3, 'varnames',{'Gene','Laser','DelayLen'});
+
+perf5t=perf5(:,[3 3 1 2]);
+perf5t(:,2)=decay(5);
+perf8t=perf8(:,[3 3 1 2]);
+perf8t(:,2)=decay(8);
+perf12t=perf12(:,[3 3 1 2]);
+perf12t(:,2)=decay(12);
+
+t=[perf5t;perf8t;perf12t];
+perfT=table(t(:,1),t(:,2),t(:,3),t(:,4),'VariableNames',{'Gene','Delay','Laser_Off','Laser_On'});
+laser=table({'Off';'On'},'VariableNames',{'Laser'});
+RptMdl=fitrm(perfT,'Laser_Off,Laser_On~Gene*Delay','WithinDesign',laser);
+[ranovatbl,A,C,D]=ranova(RptMdl,'WithinModel','Laser')
+
+
+tdiff=[t(:,1:2),t(:,4)-t(:,3)];
+
+anovan(tdiff(:,3),{tdiff(:,1),tdiff(:,2)},'model','interaction','continuous',2, 'varnames',{'Gene','DelayLen'});
+
+anova1(tdiff(:,3))
+
 end
 
 % sel=@(x,y) x(x(:,3)==y,1:2);
@@ -226,5 +499,22 @@ end
 % 
 % 
 
+function p=permTest()
+dperf=[perfDPABlock(:,2)-perfDPABlock(:,1),perfDPABlock(:,3)];
+dCtrl=dperf(dperf(:,2)<0.5,1);
+dChR2=dperf(dperf(:,2)>0.5,1);
+
+pool=[dCtrl;dChR2];
+currDiff=abs(mean(dChR2)-mean(dCtrl));
 
 
+rpt=1000;
+permDiff=nan(1,rpt);
+
+for i=1:rpt
+    pool=pool(randperm(length(pool)));
+    permDiff(i)=abs(mean(pool(1:length(dCtrl))-mean(pool(length(dCtrl)+1:end))));
+end
+p=nnz(permDiff>currDiff)/rpt;
+
+end

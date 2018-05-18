@@ -50,6 +50,9 @@ dd=0.5;
 randd=@(x) rand(size(x,1),1)*0.5-0.25;
 plot((x+randd(y))',y',sprintf('-%s.',pColor));
 
+[~,p]=ttest(y(:,1),y(:,2));
+disp(p);
+
 ci=bootci(100,@(x) mean(x), y(:,2));
 plot([x(2)-dd,x(2)-dd],ci,sprintf('-%s',pColor),'LineWidth',1);
 disp(ci)

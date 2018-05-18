@@ -1,16 +1,17 @@
 
-function perfDPA=plot_DPA_dual(infiles,outfile)
+function perfDPA=plot_DPA_dual(infiles,outfile1,outfile2)
 % [~,perfDPA]=stats_New_Cri(ODPAfiles.DPA_delay_laser);
 [~,perfDPA]=stats_New_Cri(infiles);
 
 close all;
 set(groot,'DefaultLineLineWidth',1);
 % figure('Color','w','Position',[100,100,150,180]);
-figure('Color','w','Position',[100,100,150,150]);
+figure('Color','w','Position',[100,100,245,140]);
 hold on;
 plotOne([2,1],perfDPA(perfDPA(:,3)==0,1:2),'k');
 plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,1:2),'b');
-
+% [~,pn]=ttest(perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==0,2));
+% [~,p]=ttest(perfDPA(perfDPA(:,3)==1,1),perfDPA(perfDPA(:,3)==1,2));
 
 xlim([0,6]);
 % ylim([55,100]);
@@ -19,19 +20,47 @@ ylim([65,100]);
 % plot([12,12],ylim(),':k','LineWidth',1);
 
 % set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
-set(gca,'YTick',70:10:100,'XTick',[1 2 4 5],'XTickLabel',[]);
-savefig([outfile,'.fig']);
-print([outfile,'.eps'],'-depsc','-r0');
+set(gca,'YTick',70:10:100,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+savefig([outfile1,'.fig']);
+print([outfile1,'.eps'],'-depsc','-r0');
 
-[~,pn]=ttest(perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==0,2));
-[~,p]=ttest(perfDPA(perfDPA(:,3)==1,1),perfDPA(perfDPA(:,3)==1,2));
 
-nDPA1=[perfDPA(:,1),perfDPA(:,3),ones(length(perfDPA),1)];
-nDPA0=[perfDPA(:,2),perfDPA(:,3),ones(length(perfDPA),1)*0];
 
-toN=[nDPA1;nDPA0];
-fprintf('ttest WT %.3f, ttest ChR2 %.3f\n',pn,p);
-anovan(toN(:,1),{toN(:,2),toN(:,3)},'model','interaction','varnames',{'Gene','Laser'});
+if exist('outfile2','var')
+    figure('Color','w','Position',[100,100,250,180]);
+    hold on;
+
+    yyaxis left;
+    plotOne([2,1],perfDPA(perfDPA(:,3)==1,4:5),'b');
+    plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,6:7),'b');
+
+
+    yyaxis right;
+    plotOne([6,5]+2,norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),'b');
+    set(gca,'XTick',[1 2 4 5 7 8],'XTickLabel',{'off','on','off','on','off','on'});
+    ah=gca();
+    ah.YAxis(1).Color='k';
+    ah.YAxis(2).Color='k';
+    xlim([0,9]);
+    savefig([outfile2,'.fig']);
+    print([outfile2,'.eps'],'-depsc','-r0');
+    
+end
+% 
+% figure('Color','w','Position',[100,100,150,150]);
+% hold on;
+% plotOne([2,1],perfDPA(perfDPA(:,3)==1,4:5),'b');
+% plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,6:7),'b');
+
+
+
+
+% nDPA1=[perfDPA(:,1),perfDPA(:,3),ones(length(perfDPA),1)];
+% nDPA0=[perfDPA(:,2),perfDPA(:,3),ones(length(perfDPA),1)*0];
+% 
+% toN=[nDPA1;nDPA0];
+% fprintf('ttest WT %.3f, ttest ChR2 %.3f\n',pn,p);
+% anovan(toN(:,1),{toN(:,2),toN(:,3)},'model','interaction','varnames',{'Gene','Laser'});
 
 end
 
@@ -146,9 +175,12 @@ dd=0.5;
 randd=@(x) rand(size(x,1),1)*0.5-0.25;
 plot((x+randd(y))',y',sprintf('-%s.',pColor));
 
+[~,p]=ttest(y(:,1),y(:,2));
+disp(p);
+
 ci=bootci(100,@(x) mean(x), y(:,2));
 plot([x(2)-dd,x(2)-dd],ci,sprintf('-%s',pColor),'LineWidth',1);
-disp(ci)
+
 ci=bootci(100,@(x) mean(x), y(:,1));
 plot([x(1)+dd,x(1)+dd],ci,sprintf('-%s',pColor),'LineWidth',1);
 
@@ -157,3 +189,22 @@ plot(x(1)+dd,mean(y(:,1)),sprintf('%so',pColor),'MarkerFaceColor',pColor,'Marker
 
 end
 
+function p=permTest()
+dperf=[perf(:,2)-perf(:,1),perf(:,3)];
+dCtrl=dperf(dperf(:,2)<0.5,1);
+dChR2=dperf(dperf(:,2)>0.5,1);
+
+pool=[dCtrl;dChR2];
+currDiff=abs(mean(dChR2)-mean(dCtrl));
+
+
+rpt=1000;
+permDiff=nan(1,rpt);
+
+for i=1:rpt
+    pool=pool(randperm(length(pool)));
+    permDiff(i)=abs(mean(pool(1:length(dCtrl))-mean(pool(length(dCtrl)+1:end))));
+end
+p=nnz(permDiff>currDiff)/rpt;
+
+end

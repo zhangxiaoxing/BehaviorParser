@@ -6,7 +6,7 @@ if ~ismember('I:\java\zmat\build\classes\',p)
 end
 
 z=zmat.Zmat;
-z.setFullSession(20);
+z.setFullSession(0);
 
 ids=unique(cellfun(@(x) x{1},regexp(files,'\\(\w{0,1}\d{1,4})_','tokens','once'),'UniformOutput',false));
 
@@ -37,13 +37,18 @@ allTrial=[];
 perMice=[];
 for mice=1:length(ids)
     oneMice=[];
+%     lickEff
     f=getMiceFile(ids{mice});
     if size(f,1)>0
         for fidx=1:size(f,1)
             z.processFile(f(fidx,:));
             facSeq=z.getFactorSeq(false);
-            facSeq(:,6)=1:size(facSeq,1);
-            facSeq(:,7)=mice;
+%             facSeq(:,6)=1:size(facSeq,1);
+%             facSeq(:,7)=mice;
+            if length(facSeq)<50
+                continue;
+            end
+            facSeq(:,15)=facSeq(:,5);
             facSeq=clearBadPerf(facSeq);
             if length(facSeq)<50
                 continue;
@@ -56,7 +61,7 @@ for mice=1:length(ids)
 %             end
 
                 % Sample, Test, Laser, Correct, 
-                %                       Lick, trial#, mice#, Geno
+                %                       Lick, prevCorrect#, prevLick#, Geno
 
 
             facSeq(facSeq(:,4)==3 | facSeq(:,4)==5,5)=1;
@@ -68,10 +73,12 @@ for mice=1:length(ids)
             
                 
 
-%              facSeq(:,6)=([0;facSeq(1:end-1,4)]);
-%             facSeq(:,7)=([0;facSeq(1:end-1,5)]);
+            facSeq(:,6)=([0;facSeq(1:end-1,4)]);%prev correct
+            facSeq(:,7)=([0;facSeq(1:end-1,5)]);%prev lick
 
             facSeq(:,8)=ismember(ids{mice},optoPos);
+            
+            
             
             allTrial=[allTrial;facSeq];
             oneMice=[oneMice;facSeq];
@@ -89,7 +96,11 @@ for mice=1:length(ids)
         falseOn=sum(oneMice(:,3) & oneMice(:,4)==0 & matchOdor(oneMice(:,1),oneMice(:,2)))*100/sum(oneMice(:,3) & matchOdor(oneMice(:,1),oneMice(:,2)));
         falseOff=sum(oneMice(:,3)==0 & oneMice(:,4)==0 & matchOdor(oneMice(:,1),oneMice(:,2)))*100/sum(oneMice(:,3)==0 & matchOdor(oneMice(:,1),oneMice(:,2)));
         
-        perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff,mice];
+        lickEffOn=sum(oneMice((oneMice(:,1) ~= oneMice(:,2)) & oneMice(:,3) ,15))*100/sum(oneMice(oneMice(:,3)==1,15));
+        lickEffOff=sum(oneMice((oneMice(:,1) ~= oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
+        
+        perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
+        
     end
 end
 
@@ -167,7 +178,7 @@ function load
 [allTrialsBoth,perfBoth]=stats_GLM(dnmsfiles.bothOdor);
 
 [allTrialsGNG,perfGNG]=stats_GLM(dnmsfiles.gonogo);
-[allTrialsGNG,perfNodelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
+[allTrialsNoDelay,perfNoDelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
 
 % [allTrialsDPATrial,perfDPATrial]=stats_GLM(fsdpatrialonoff);
 [allTrialsDPABlock,perfDPABlock]=stats_GLM(ODPAfiles.DPA_delay_laser);
