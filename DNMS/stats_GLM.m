@@ -1,4 +1,4 @@
-function [allTrial,perMice]=stats_GLM(files)
+function [allTrial,perMice]=stats_GLM(files,suppressLaser)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -43,6 +43,9 @@ for mice=1:length(ids)
         for fidx=1:size(f,1)
             z.processFile(f(fidx,:));
             facSeq=z.getFactorSeq(false);
+            if exist('suppressLaser','var') && suppressLaser
+                facSeq(:,3)=0;
+            end
 %             facSeq(:,6)=1:size(facSeq,1);
 %             facSeq(:,7)=mice;
             if length(facSeq)<50
@@ -86,6 +89,7 @@ for mice=1:length(ids)
     end
     
     matchOdor=@(x,y) ismember(x,[2 5 7])==ismember(y,[2 5 7]);
+%     isPair=@(x,y) ismember(x,[2 5])~=ismember(y,[2 5]);
     
     if numel(oneMice)>3
         perfOn=sum(oneMice(:,3) & oneMice(:,4))*100/sum(oneMice(:,3));
@@ -96,8 +100,8 @@ for mice=1:length(ids)
         falseOn=sum(oneMice(:,3) & oneMice(:,4)==0 & matchOdor(oneMice(:,1),oneMice(:,2)))*100/sum(oneMice(:,3) & matchOdor(oneMice(:,1),oneMice(:,2)));
         falseOff=sum(oneMice(:,3)==0 & oneMice(:,4)==0 & matchOdor(oneMice(:,1),oneMice(:,2)))*100/sum(oneMice(:,3)==0 & matchOdor(oneMice(:,1),oneMice(:,2)));
         
-        lickEffOn=sum(oneMice((oneMice(:,1) ~= oneMice(:,2)) & oneMice(:,3) ,15))*100/sum(oneMice(oneMice(:,3)==1,15));
-        lickEffOff=sum(oneMice((oneMice(:,1) ~= oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
+        lickEffOn=sum(oneMice(~matchOdor(oneMice(:,1),oneMice(:,2)) & oneMice(:,3) ,15))*100/sum(oneMice(oneMice(:,3)==1,15));
+        lickEffOff=sum(oneMice(~matchOdor(oneMice(:,1),oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
         
         perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
         

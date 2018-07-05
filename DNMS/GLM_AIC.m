@@ -2,12 +2,12 @@
 fillIn=@(x,y) [x(:,1:8),repmat(y,size(x,1),1)];
 decay=@(x) 50-exp(-x/21.37)*50;
 
-allTrials5=fillIn(allTrials5,[decay(5) 1 0 0 0 3]);
-allTrials8=fillIn(allTrials8,[decay(8) 1 0 0 0 6]);
-allTrials12=fillIn(allTrials12,[decay(12) 1 0 0 0 10]);
-allTrialsBase=fillIn(allTrialsBase,[decay(5) 0 1 0 0 3]);
-allTrialsNoDelay=fillIn(allTrialsNoDelay,[decay(0.2) 0 1 0 0 2]);
-allTrialsNoLaser=fillIn(allTrialsNoLaser,[decay(5) 0 0 0 0 3]);
+allTrials5=fillIn(double(allTrials5),[decay(5) 1 0 0 0 3]);
+allTrials8=fillIn(double(allTrials8),[decay(8) 1 0 0 0 6]);
+allTrials12=fillIn(double(allTrials12),[decay(12) 1 0 0 0 10]);
+allTrialsBase=fillIn(double(allTrialsBase),[decay(5) 0 1 0 0 3]);
+allTrialsNoDelay=fillIn(double(allTrialsNoDelay),[decay(0.2) 0 1 0 0 2]);
+allTrialsNoLaser=fillIn(double(allTrialsNoLaser),[decay(5) 0 0 0 0 3]);
 allTrials=[allTrials5;allTrials8;allTrials12;allTrialsBase;allTrialsNoDelay;allTrialsNoLaser];
 
 matchOdor=@(x,y) ismember(x,[2 5 7])==ismember(y,[2 5 7]);
@@ -90,8 +90,18 @@ termsMatCompact=[0 0 0 0 0  0  0  0  0  0  0;
           0 0 0 0 0  0  0  0  0  1  0;
           0 0 0 0 1  0  0  0  0  0  0;
           0 0 1 1 1  1  0  0  0  0  0;
-          ];
+              ];
+    %     s t l g dl pd pb ps pt mt out
+    %                     prevprev          
+    %                     corrlick
+      
+termsMatPBCtrl=[0 0 0 0 0  0  0  0  0  0  0;
 
+          0 0 0 0 0  0  0  0  0  1  0;
+          0 0 0 0 1  0  0  0  0  0  0;
+          0 0 1 1 0  0  1  0  0  0  0;
+          ];      
+      
 
 
 
@@ -196,18 +206,18 @@ termsNoInter=[0 0 0 0 0  0  0  0  0  0  0;
           ];
       
 
-termsList={termsConst,termsSTM,termsSTMD,termsNoInter,termsMatCompact,termsMat};
+termsList={termsConst,termsSTM,termsSTMD,termsNoInter,termsMat,termsMatCompact,termsMatPBCtrl};
 AICs=nan(1,length(termsList));
 rsq=nan(1,length(termsList));
 for termsIdx=1:length(termsList)
-    mdl=fitglm(X,y,termsList{termsIdx},'Categorical',[1:4,6:10],'Distribution','normal',...
+    mdlAIC{termsIdx}=fitglm(X,y,termsList{termsIdx},'Categorical',[1:4,6:10],'Distribution','normal',...
          'VarNames',{'Sample','Test','Laser','Genotype','Memory_decay','Perturb_Delay','Perturb_Baseline','Perturb_Sample','Perturb_Test','Match','Correct_rate'});
 
     % disp(mdl);
-    AICs(termsIdx)=mdl.ModelCriterion.AIC;
-    rsq(termsIdx)=mdl.Rsquared.Ordinary;
+    AICs(termsIdx)=mdlAIC{termsIdx}.ModelCriterion.AIC;
+    rsq(termsIdx)=mdlAIC{termsIdx}.Rsquared.Ordinary;
 end
-figure('Color','w','Position',[400,400,185,195]);
+figure('Color','w','Position',[400,400,175,210]);
 hold on;
 yyaxis left;
 plot(AICs,'-ro','LineWidth',1);
@@ -217,7 +227,8 @@ yyaxis right;
 plot(rsq,'-ko','LineWidth',1);
 set(gca,'YColor','k');
 ylabel('R-squared','FontSize',10);
-set(gca,'XTickLabel',[]);
+set(gca,'XTick',1:7);
+xlabel('Model #','FontSize',10,'FontName','Helvetica','Color','k');
 xlim([0.5,length(termsList)+0.5]);
 
 % disp(mdl.Rsquared);

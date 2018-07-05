@@ -53,7 +53,7 @@ classdef plotLearn < handle
                 xlabel('Day (100 trials / day)','Color','k');
                 ylabel(plotTitle,'Color','k');
                 
-                h=legend([hc hop],{sprintf('Ctrl n = %d',sum(~perf(:,2))),sprintf('VGAT-ChR2 n = %d',sum(perf(:,2)))});
+                h=legend([hc hop],{sprintf('Ctrl n = %d',sum(~perf(:,2))),sprintf('VGAT-ChR2 n = %d',sum(perf(:,2)))},'Location','northoutside');
                 h.FontSize=10;
                 
                 obj.figs=[obj.figs,hf];

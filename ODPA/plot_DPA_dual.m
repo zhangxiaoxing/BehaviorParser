@@ -14,36 +14,68 @@ plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,1:2),'b');
 % [~,p]=ttest(perfDPA(perfDPA(:,3)==1,1),perfDPA(perfDPA(:,3)==1,2));
 
 xlim([0,6]);
-% ylim([55,100]);
-ylim([65,100]);
+ylim([55,100]);
+% ylim([65,100]);
 
 % plot([12,12],ylim(),':k','LineWidth',1);
 
 % set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
-set(gca,'YTick',70:10:100,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
 savefig([outfile1,'.fig']);
 print([outfile1,'.eps'],'-depsc','-r0');
+disp('ranksum hit');
+disp(ranksum(perfDPA(perfDPA(:,3)==0,2)-perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==1,2)-perfDPA(perfDPA(:,3)==1,1)));
+disp('ranksum miss')
+disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,4:5),1,2),diff(perfDPA(perfDPA(:,3)==1,4:5),1,2)));
+disp('ranksum false')
+disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,6:7),1,2),diff(perfDPA(perfDPA(:,3)==1,6:7),1,2)));
+disp('ranksum lickEff')
+disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,9:10),1,2),diff(perfDPA(perfDPA(:,3)==1,9:10),1,2)));
+disp('ranksum d''')
+disp(ranksum(...
+diff(norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+diff(norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),1,2)));
 
 
 
 if exist('outfile2','var')
-    figure('Color','w','Position',[100,100,250,180]);
+    disp('Miss, FA, LickEff, d''');
+    
+    figure('Color','w','Position',[100,100,160,180]);
     hold on;
-
-    yyaxis left;
-    plotOne([2,1],perfDPA(perfDPA(:,3)==1,4:5),'b');
+    plotOne([2,1],perfDPA(perfDPA(:,3)==0,4:5),'k');
+    plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,4:5),'b');
+    set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+    xlim([0,6]);
+    ylabel('Miss (%)','FontSize',10);
+    
+    
+    figure('Color','w','Position',[300,100,160,180]);
+    hold on;    
+    plotOne([2,1],perfDPA(perfDPA(:,3)==0,6:7),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,6:7),'b');
+    set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+    xlim([0,6]);
+    ylabel('False alarm (%)','FontSize',10);
 
-
-    yyaxis right;
-    plotOne([6,5]+2,norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),'b');
-    set(gca,'XTick',[1 2 4 5 7 8],'XTickLabel',{'off','on','off','on','off','on'});
-    ah=gca();
-    ah.YAxis(1).Color='k';
-    ah.YAxis(2).Color='k';
-    xlim([0,9]);
-    savefig([outfile2,'.fig']);
-    print([outfile2,'.eps'],'-depsc','-r0');
+    figure('Color','w','Position',[500,100,160,180]);
+    hold on;    
+    plotOne([2,1],perfDPA(perfDPA(:,3)==0,9:10),'k');
+    plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,9:10),'b');
+    set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+    xlim([0,6]);
+    ylabel('Lick efficiency (%)','FontSize',10);
+    
+    figure('Color','w','Position',[700,100,160,180]);
+    hold on;
+    plotOne([2,1],norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),'k');
+    plotOne([4,3]+1,norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),'b');
+    set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+    xlim([0,6]);
+    ylabel('Sensitivity index (d'')','FontSize',10);
+    
+%     savefig([outfile2,'.fig']);
+%     print([outfile2,'.eps'],'-depsc','-r0');
     
 end
 % 
@@ -97,16 +129,26 @@ for mice=1:length(ids)
             z.setFullSession(24);
             z.processFile(strtrim(f(fidx,:)));
             facSeq=z.getFactorSeq();
+            
             if numel(facSeq)<50
                 z.setFullSession(48);
                 z.processFile(strtrim(f(fidx,:)));
                 facSeq=z.getFactorSeq();
                 z.setFullSession(24);
             end
-
-
+            if numel(facSeq)<10
+                continue;
+            end
+            facSeq(:,15)=facSeq(:,7);
+            if numel(facSeq)<50
+                z.setFullSession(48);
+                z.processFile(strtrim(f(fidx,:)));
+                facSeq=z.getFactorSeq();
+                z.setFullSession(24);
+            end
 %             fprintf('%d, %s\n',numel(facSeq),f(fidx,:));
             facSeq=clearBadPerf(facSeq);
+%             facSeq=facSeq(ismember(facSeq(:,6),[3 6]),:);
             if length(facSeq)<50
                 continue;
             end
@@ -137,7 +179,12 @@ for mice=1:length(ids)
         
         falseOn=sum(oneMice(:,3) & oneMice(:,4)==0 & ~isPair(oneMice(:,1),oneMice(:,2)))*100/sum(oneMice(:,3) & ~isPair(oneMice(:,1),oneMice(:,2)));
         falseOff=sum(oneMice(:,3)==0 & oneMice(:,4)==0 & ~isPair(oneMice(:,1),oneMice(:,2)))*100/sum(oneMice(:,3)==0 & ~isPair(oneMice(:,1),oneMice(:,2)));
-        perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff];
+                
+        
+        lickEffOn=sum(oneMice(isPair(oneMice(:,1), oneMice(:,2)) & oneMice(:,3) ,15))*100/sum(oneMice(oneMice(:,3)==1,15));
+        lickEffOff=sum(oneMice(isPair(oneMice(:,1), oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
+        perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
+        
     end
 end
 
@@ -156,7 +203,7 @@ function out=clearBadPerf(facSeq)
         i=80;
         while i<length(facSeq)
             goodOff=sum((facSeq(i-79:i,4)==3 | facSeq(i-79:i,4)==6)& facSeq(i-79:i,3)==0);
-            if goodOff>=40*80/100
+            if goodOff>=40*80/100  % well trained criteria
                 facSeq(i-79:i,5)=1;
             end
             i=i+1;

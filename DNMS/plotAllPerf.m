@@ -1,19 +1,218 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Perf 12 8 5 %%%%%%%%%%%%%%%%%%%
+
+% % 
+close all;
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct Rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perf5s.eps');
+
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf8(perf8(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perf8(perf8(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
+xlim([0,6]);
+ylim([55,100]);ylabel('Correct Rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perf8s.eps');
+
+
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf12(perf12(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perf12(perf12(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct Rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perf12s.eps');
+
+disp('ranksum 5, 8, 12');
+disp(ranksum(diff(perf5(perf5(:,3)==0,1:2),1,2),diff(perf5(perf5(:,3)==1,1:2),1,2)));
+disp(ranksum(diff(perf8(perf8(:,3)==0,1:2),1,2),diff(perf8(perf8(:,3)==1,1:2),1,2)));
+disp(ranksum(diff(perf12(perf12(:,3)==0,1:2),1,2),diff(perf12(perf12(:,3)==1,1:2),1,2)));
+return
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%% false miss lick dp 12s
 % 
-% close all;
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,450,180]);
+% figure('Color','w','Position',[100,100,170,180]);
 % hold on;
-% plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
-% plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
-% plotOne([6,5]+2,perf8(perf8(:,3)==1,1:2),'b');
-% plotOne([8,7]+3,perf12(perf12(:,3)==1,1:2),'b');
-% % plotOne([10,9]+4,perfBase(perfBase(:,3)==1,1:2),'b');
+% plotOne([2,1],perf12(perf12(:,3)==0,4:5),'k');
+% plotOne([4,3]+1,perf12(perf12(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Miss (%)','FontSize',10);
+% print('-depsc','-painters','-r0','miss12s.eps');
 % 
-% set(gca,'XTick',[2 3 5 6 8 9 11 12]-1,'XTickLabel',{'off','on','off','on','off','on','off','on'});
+% figure('Color','w','Position',[300,100,170,180]);
+% hold on;
+% plotOne([2,1],perf12(perf12(:,3)==0,6:7),'k');
+% plotOne([4,3]+1,perf12(perf12(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('False alarm (%)','FontSize',10);
+% print('-depsc','-painters','-r0','false12s.eps');
 % 
-% xlim([0,12]);
-% ylim([55,100]);
+% figure('Color','w','Position',[500,100,170,180]);
+% hold on;
+% plotOne([2,1],perf12(perf12(:,3)==0,9:10),'k');
+% plotOne([4,3]+1,perf12(perf12(:,3)==1,9:10),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Lick efficiency (%)','FontSize',10);
+% print('-depsc','-painters','-r0','lick12s.eps');
 % 
+% figure('Color','w','Position',[700,100,170,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perf12(perf12(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==0,6:7)./100*0.98+0.01),'k');
+% plotOne([4,3]+1,norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Sensitivity index (d'')','FontSize',10);
+% print('-depsc','-painters','-r0','dprime12s.eps');
+% 
+% 
+% disp('ranksum miss')
+% disp(ranksum(diff(perf12(perf12(:,3)==0,4:5),1,2),diff(perf12(perf12(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perf12(perf12(:,3)==0,6:7),1,2),diff(perf12(perf12(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perf12(perf12(:,3)==0,9:10),1,2),diff(perf12(perf12(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perf12(perf12(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+% 
+% 
+% return
+
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%% false miss lick dp 8s
+% 
+% figure('Color','w','Position',[100,100,170,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==0,4:5),'k');
+% plotOne([4,3]+1,perf8(perf8(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Miss (%)','FontSize',10);
+% print('-depsc','-painters','-r0','miss8s.eps');
+% 
+% figure('Color','w','Position',[300,100,170,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==0,6:7),'k');
+% plotOne([4,3]+1,perf8(perf8(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('False alarm (%)','FontSize',10);
+% print('-depsc','-painters','-r0','false8s.eps');
+% 
+% figure('Color','w','Position',[500,100,170,180]);
+% hold on;
+% plotOne([2,1],perf8(perf8(:,3)==0,9:10),'k');
+% plotOne([4,3]+1,perf8(perf8(:,3)==1,9:10),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Lick efficiency (%)','FontSize',10);
+% print('-depsc','-painters','-r0','lick8s.eps');
+% 
+% figure('Color','w','Position',[700,100,170,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perf8(perf8(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==0,6:7)./100*0.98+0.01),'k');
+% plotOne([4,3]+1,norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Sensitivity index (d'')','FontSize',10);
+% print('-depsc','-painters','-r0','dprime8s.eps');
+% 
+% 
+% disp('ranksum miss')
+% disp(ranksum(diff(perf8(perf8(:,3)==0,4:5),1,2),diff(perf8(perf8(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perf8(perf8(:,3)==0,6:7),1,2),diff(perf8(perf8(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perf8(perf8(:,3)==0,9:10),1,2),diff(perf8(perf8(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perf8(perf8(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+% 
+% 
+% return
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% false miss lick dp 8s
+% 
+% figure('Color','w','Position',[100,100,170,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==0,4:5),'k');
+% plotOne([4,3]+1,perf5(perf5(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Miss (%)','FontSize',10);
+% print('-depsc','-painters','-r0','miss5s.eps');
+% 
+% figure('Color','w','Position',[300,100,170,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==0,6:7),'k');
+% plotOne([4,3]+1,perf5(perf5(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('False alarm (%)','FontSize',10);
+% print('-depsc','-painters','-r0','false5s.eps');
+% 
+% figure('Color','w','Position',[500,100,170,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==0,9:10),'k');
+% plotOne([4,3]+1,perf5(perf5(:,3)==1,9:10),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Lick efficiency (%)','FontSize',10);
+% print('-depsc','-painters','-r0','lick5s.eps');
+% 
+% figure('Color','w','Position',[700,100,170,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perf5(perf5(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==0,6:7)./100*0.98+0.01),'k');
+% plotOne([4,3]+1,norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Sensitivity index (d'')','FontSize',10);
+% print('-depsc','-painters','-r0','dprime5s.eps');
+% 
+% 
+% disp('ranksum miss')
+% disp(ranksum(diff(perf5(perf5(:,3)==0,4:5),1,2),diff(perf5(perf5(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perf5(perf5(:,3)==0,6:7),1,2),diff(perf5(perf5(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perf5(perf5(:,3)==0,9:10),1,2),diff(perf5(perf5(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perf5(perf5(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+% 
+% 
+% return
+% 
+
+
+
 % 
 % set(groot,'DefaultLineLineWidth',1);
 % figure('Color','w','Position',[100,100,160,180]);
@@ -38,8 +237,8 @@
 % ranksum(diff(perf12(perf12(:,3)==0,1:2),1,2),diff(perf12(perf12(:,3)==1,1:2),1,2))
 % 
 % decay=@(x) 50-exp(-x/21.37)*50;
-% % decay=@(x) x;
-% 
+% decay=@(x) x;
+
 % n51=[perf5(:,1),perf5(:,3),ones(length(perf5),1),ones(length(perf5),1)*decay(5),perf5(:,8),ones(length(perf5),1)*1];
 % n50=[perf5(:,2),perf5(:,3),ones(length(perf5),1)*0,ones(length(perf5),1)*decay(5),perf5(:,8),ones(length(perf5),1)*2];
 % n81=[perf8(:,1),perf8(:,3),ones(length(perf8),1),ones(length(perf8),1)*decay(8),perf8(:,8),ones(length(perf8),1)*3];
@@ -49,26 +248,62 @@
 % toN=[n51;n50;n81;n80;n121;n120];
 % 
 % anovan(toN(:,1),{toN(:,6)},'varnames',{'Group'});
+
+% d5Ch=diff(perf5(perf5(:,3)==1,[1,2]),1,2);
+% d8Ch=diff(perf8(perf8(:,3)==1,[1,2]),1,2);
+% d12Ch=diff(perf12(perf12(:,3)==1,[1,2]),1,2);
+% anovan([d5Ch;d8Ch;d12Ch],{[ones(size(d5Ch));ones(size(d8Ch))*2;ones(size(d12Ch))*12]});
 % 
-% 
+
+
 % return;
 
 %%%%%%%%%%%%%%%%%%%
 % Ctrl Op Supress %
 %%%%%%%%%%%%%%%%%%%
 
-% figure('Color','w','Position',[100,100,245,180]);
-% hold on;
-% plotOne([2,1]+1,perfBase(perfBase(:,3)==1,1:2),'b');
-% plotOne([4,3]+2,perfGNG(perfGNG(:,3)==1,1:2),'b');
-% plotOne([6,5]+3,perfNoDelay(perfNoDelay(:,3)==1,1:2),'b');
-% ylabel('Correct rate (%)');
+% [~,perfGNG]=stats_GLM(dnmsfiles.gonogo);
 % 
-% xlim([1,10]);
-% ylim([55,100]);
-% set(gca,'XTick',[2 3 5 6 8 9],'XTickLabel',{'off','on','off','on','off','on'});
-% print('CtrlOpSupress.eps','-depsc','-r0','-painters');
-% return;
+% [~,perfBase]=stats_GLM(dnmsfiles.baseline);
+% [~,perfNoDelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
+
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perfBase(perfBase(:,3)==0,1:2),'k');
+plotOne([5,4],perfBase(perfBase(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylabel('Correct rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perfBaseline.eps');
+
+
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perfGNG(perfGNG(:,3)==0,1:2),'k');
+plotOne([5,4],perfGNG(perfGNG(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylabel('Correct rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perfGNG.eps');
+
+
+
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perfNoDelay(perfNoDelay(:,3)==0,1:2),'k');
+plotOne([5,4],perfNoDelay(perfNoDelay(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylabel('Correct rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perfNoDelay.eps');
+
+
+disp('ranksum baseline GNG noDelay');
+ranksum(diff(perfBase(perfBase(:,3)==0,1:2),1,2),diff(perfBase(perfBase(:,3)==1,1:2),1,2))
+ranksum(diff(perfGNG(perfGNG(:,3)==0,1:2),1,2),diff(perfGNG(perfGNG(:,3)==1,1:2),1,2))
+ranksum(diff(perfNoDelay(perfNoDelay(:,3)==0,1:2),1,2),diff(perfNoDelay(perfNoDelay(:,3)==1,1:2),1,2))
+
+return;
 
 
 % figure('Color','w','Position',[100,100,180,180]);
@@ -95,8 +330,8 @@
 % set(gca,'XTick',[2 3 5 6 8 9],'XTickLabel',{'off','on','off','on','off','on'});
 % print('CtrlOpSupress.eps','-depsc','-r0','-painters');
 % return;
-
-
+% 
+% 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 12s false miss %
@@ -252,64 +487,64 @@
 % return;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 5s false miss %
-%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 5s false miss %
+% %%%%%%%%%%%%%%%%%%
+% 
+% close all;
+% set(groot,'DefaultLineLineWidth',1);
+% 
+% figure('Color','w','Position',[100,100,160,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('Miss (%)');
+% 
+% 
+% figure('Color','w','Position',[300,100,160,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('False alarm (%)');
+% 
+% 
+% figure('Color','w','Position',[500,100,160,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% set(gca,'YColor','k');
+% xlim([0,3]);
+% ylabel('Sensitivity index(d'')');
+% 
+% 
+% 
+% [~,p12m]=ttest(perf5(perf5(:,3)==1,4),perf5(perf5(:,3)==1,5));
+% [~,p12f]=ttest(perf5(perf5(:,3)==1,6),perf5(perf5(:,3)==1,7));
+% 
+% 
+% 
+% 
+% figure('Color','w','Position',[700,100,160,180]);
+% hold on;
+% plotOne([2,1],perf5(perf5(:,3)==1,9:10),'b');
+% xlim([1,4]);
+% % ylim([55,100]);
+% set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
+% xlim([0,3]);
+% ylabel('Lick efficiency');
+% 
+% 
+% return;
 
-close all;
-set(groot,'DefaultLineLineWidth',1);
-
-figure('Color','w','Position',[100,100,160,180]);
-hold on;
-plotOne([2,1],perf5(perf5(:,3)==1,4:5),'b');
-set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
-set(gca,'YColor','k');
-xlim([0,3]);
-ylabel('Miss (%)');
 
 
-figure('Color','w','Position',[300,100,160,180]);
-hold on;
-plotOne([2,1],perf5(perf5(:,3)==1,6:7),'b');
-set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
-set(gca,'YColor','k');
-xlim([0,3]);
-ylabel('False alarm (%)');
-
-
-figure('Color','w','Position',[500,100,160,180]);
-hold on;
-plotOne([2,1],norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
-set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
-set(gca,'YColor','k');
-xlim([0,3]);
-ylabel('Sensitivity index(d'')');
-
-
-
-[~,p12m]=ttest(perf5(perf5(:,3)==1,4),perf5(perf5(:,3)==1,5));
-[~,p12f]=ttest(perf5(perf5(:,3)==1,6),perf5(perf5(:,3)==1,7));
-
-
-
-
-figure('Color','w','Position',[700,100,160,180]);
-hold on;
-plotOne([2,1],perf5(perf5(:,3)==1,9:10),'b');
-xlim([1,4]);
-% ylim([55,100]);
-set(gca,'XTick',[1,2],'XTickLabel',{'off','on'});
-xlim([0,3]);
-ylabel('Lick efficiency');
-
-
-return;
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%    DPA block
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %    DPA block
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % close all;
 % set(groot,'DefaultLineLineWidth',1);
 % figure('Color','w','Position',[100,100,245,180]);
@@ -325,27 +560,60 @@ return;
 % ah.YAxis.Color='k';
 % print('DPAperf.eps','-depsc','-r0');
 % 
-% figure('Color','w','Position',[100,100,250,180]);
-% hold on;
-% yyaxis left;
-% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==1,4:5),'b');
-% plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,6:7),'b');
-% set(gca,'YTick',0:50:100);
-% yyaxis right;
-% plotOne([6,5]+2,norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),'b');
-% xlim([0,9]);
+% disp('ranksum hit');
+% disp(ranksum(perfDPABlock(perfDPABlock(:,3)==0,2)-perfDPABlock(perfDPABlock(:,3)==0,1),perfDPABlock(perfDPABlock(:,3)==1,2)-perfDPABlock(perfDPABlock(:,3)==1,1)));
+% disp('ranksum miss')
+% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,4:5),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,6:7),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,9:10),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perfDPABlock(perfDPABlock(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),1,2)));
 % 
-% ah=gca();
-% ah.YAxis(1).Color='k';
-% ah.YAxis(2).Color='k';
-% set(gca,'XTick',[1,2,4,5,7,8],'XTickLabel',{'off','on','off','on','off','on'},'YTick',1:4);
-% ylim([1,4])
+% disp('Miss, FA, LickEff, d''');
+% 
+% 
+% figure('Color','w','Position',[100,100,160,180]);
+% hold on;
+% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,4:5),'k');
+% plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,4:5),'b');
+% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Miss');
+% 
+% figure('Color','w','Position',[300,100,160,180]);
+% hold on;
+% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,6:7),'k');
+% plotOne([5,4],perfDPABlock(perfDPABlock(:,3)==1,6:7),'b');
+% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('False alarm');
+% 
+% 
+% figure('Color','w','Position',[500,100,160,180]);
+% hold on;
+% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,9:10),'k');
+% plotOne([5,4],perfDPABlock(perfDPABlock(:,3)==1,9:10),'b');
+% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
+% ylabel('Lick efficiency');
+% 
+% 
+% figure('Color','w','Position',[700,100,160,180]);
+% hold on;
+% plotOne([2,1],norminv((1-(perfDPABlock(perfDPABlock(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==0,6:7)./100*0.98+0.01),'k');
+% plotOne([5,4],norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),'b');
+% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+% xlim([0,6]);
 % ylabel('Sensitivity index (d'')');
-% print('DPAMissFalse.eps','-depsc','-r0');
+% 
 % 
 % 
 % return;
-% 
+
 
 
 
