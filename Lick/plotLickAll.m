@@ -1,6 +1,6 @@
-function miceAverage=plotLickAll(fs,delay)
+function miceAverage=plotLickAll(fs,delayLen)
 binW=200;
-lickBin=-(delay+2)*1000:binW:3500;
+lickBin=-(delayLen+2)*1000:binW:3500;
 addpath d:\Behavior\reports\Z;
 ids=cell(0);
 for i=1:length(fs)
@@ -10,9 +10,9 @@ for i=1:length(fs)
     end
 end
 
-% optoPos={'33', '38', '41', '101', '102', '106', '107', '66', '67', '76', '78', '80', '81', '83','V14','V15','V7','V9','V1','V49','V50','V58','V59','V62','S1','S5','S6','S12','S16','S24','S32','S31','S33','S34'};
-% 
-% ids=ids(ismember(ids,optoPos));
+optoPos={'33', '38', '41', '101', '102', '106', '107', '66', '67', '76', '78', '80', '81', '83','V14','V15','V7','V9','V1','V49','V50','V58','V59','V62','S1','S5','S6','S12','S16','S24','S32','S31','S33','S34'};
+
+ids=ids(ismember(ids,optoPos));
 
 
 javaaddpath('I:\java\zmat\build\classes\')
@@ -56,7 +56,7 @@ end
 
 
 plotOne(miceAverage.hitLaser,miceAverage.hitNone,'hit');
-plotOne(miceAverage.crLaser,miceAverage.crNone,'cr');
+% plotOne(miceAverage.crLaser,miceAverage.crNone,'cr');
 
 
 
@@ -67,35 +67,63 @@ plotOne(miceAverage.crLaser,miceAverage.crNone,'cr');
 
 
     function plotOne(laserOn,laserOff,fname)
-        fh=figure('Color','w','Position',[100,100,180,160]);
+        fh=figure('Color','w','Position',[100,100,220,180]);
         hold on;
-%         plot(laserOff','Color',[0.75,0.75,0.75],'LineStyle','-');
-        ci=bootci(100,@(x) mean(x),laserOff);
-        fill([1:length(ci),length(ci):-1:1],[ci(1,:),flip(ci(2,:))],[0.5,0.5,0.5],'EdgeColor','none');
+
+        ciOn=bootci(100,@(x) mean(x),laserOn);
+        fill([1:length(ciOn),length(ciOn):-1:1],[ciOn(1,:),flip(ciOn(2,:))],[0.8,0.8,1],'EdgeColor','none');
+
+        ciOff=bootci(100,@(x) mean(x),laserOff);
+        fill([1:length(ciOff),length(ciOff):-1:1],[ciOff(1,:),flip(ciOff(2,:))],[0.5,0.5,0.5],'EdgeColor','none');
         
-%         plot(laserOn','Color',[0.85,0.85,1],'LineStyle','-');
         plot(mean(laserOff),'-k','LineWidth',1);
-%         plot(mean(laserOn),'-b','LineWidth',1);
-        set(gca,'XTick',(binW/200):(1000/binW*5):length(lickBin),'XTickLabel',0:5:length(lickBin)/(1000/binW),'FontSize',10);
-        delta=delay-5;
+        plot(mean(laserOn),'-b','LineWidth',1);
+
+        set(gca,'XTick',(binW/200):(1000/binW*2):length(lickBin),'XTickLabel',0:2:length(lickBin)/(1000/binW),'FontSize',10);
+        delta=delayLen-5;
 %         plot(repmat([2.5,4.5,14.5,16.5,18.5,19.5]+[0,0,ones(1,4).*delta.*2],2,1),[zeros(1,6);ones(1,6).*10],':k');
         plot(repmat([2.5,4.5,14.5,16.5,18.5,19.5]+[0,0,ones(1,4).*delta.*2],2,1).*(500./binW),[zeros(1,6);ones(1,6).*10],':k');
         xlabel('Time (s)','FontSize',10);
         ylabel('Lick (Hz)','FontSize',10);
+        
         text(5,5,sprintf('n = %d',size(laserOn,1)),'FontSize',10);
-        xlim([0.5,length(lickBin)-0.5]);
+        winW=1000/binW;
+        
+        xlim([delayLen.*winW,length(lickBin)]);
         ylim([0,4]);
-        savefig(fh,sprintf('%ds_%s_lick.fig',delay,fname));
+        savefig(fh,sprintf('%ds_%s_lick.fig',delayLen,fname));
         set(fh,'PaperPositionMode','auto');
-        print(fh,sprintf('%ds_%s_lick.eps',delay,fname),'-depsc','-cmyk');
-%         for pidx=1:length(lickBin)-1
-%             p=ranksum(laserOn(:,pidx),laserOff(:,pidx));
-%             if p<0.05
-%                 text(pidx,7.25,p2Str(p),'HorizontalAlignment','center');
-%                 text(pidx,7.75,sprintf('%.3f',p),'HorizontalAlignment','center');
-%             end
-%         end
+        print(fh,sprintf('%ds_%s_lick.eps',delayLen,fname),'-depsc','-cmyk');
+        
+        for pidx=1:winW:(length(lickBin)-winW-1)
+            p=permTest(laserOn(:,(pidx:pidx+winW-1)),laserOff(:,(pidx:pidx+winW-1)));
+            if p<0.05
+                text(pidx+(winW/2+0.5),3.25,p2Str(p),'HorizontalAlignment','center','FontSize',10);
+                text(pidx+(winW/2+0.5),3.75,sprintf('%.3f',p),'HorizontalAlignment','center','FontSize',10);
+                fprintf('Significant %d\n',pidx);
+             else
+                 text(pidx+(winW/2+0.5),3.25,'N.S.','HorizontalAlignment','center','FontSize',10);
+            end
+        end
         
     end
+    print('-depsc',sprintf('Lick_LaserOnOff_D%d.eps',delayLen),'-painters');
 
+end
+
+function out=permTest(A,B)
+    currDelta=abs(mean(A(:))-mean(B(:)));
+    permed=nan(1,1000);
+    for i=1:1000
+        [AA,BB]=permSample(A,B);
+        permed(i)=abs(mean(AA)-mean(BB));
+    end
+    out=mean(permed>=currDelta);
+end
+
+function [newA,newB]=permSample(A,B)
+pool=[A(:);B(:)];
+pool=pool(randperm(length(pool)));
+newA=pool(1:numel(A));
+newB=pool((numel(A)+1):end);
 end

@@ -1,30 +1,31 @@
 function plotQtrForAI()
-dpath=javaclasspath('-dynamic');
-if isempty(strfind(dpath,'arial'))
-     javaaddpath('I:\java\hel2arial\build\classes\');
-end
-h2a=hel2arial.Hel2arial;
-path(path,'I:\Behavior\reports\Z');
+% dpath=javaclasspath('-dynamic');
+% if isempty(strfind(dpath,'arial'))
+%      javaaddpath('I:\java\hel2arial\build\classes\');
+% end
+% h2a=hel2arial.Hel2arial;
+% path(path,'I:\Behavior\reports\Z');
 tags={'Performance','False Choice','Miss' };
 groups={'Ctrl','ChR2'};
 groupTags={'Ctrl','VGAT-ChR2'};
 conditions={'NoLaser','1Q','2Q','3Q','4Q'};
 conditionTags={'  No\newlineLaser','Q1','Q2','Q3','Q4'};
 
-dataFile=load('newPir.mat','pir');
-data=dataFile.pir.chr2.dnms.eachQuarter;
+dataFile=load('EachQtr.mat','EachQuarter');
+data=dataFile.EachQuarter;
 fileName={'QtrSip','QtrSif','QtrSim'};
 
-for measure=[2 3 4]
+for measure=[2]% 3 4]
     figure('Color','w', 'Position',[100,100,400 250]);
     subplot('Position',[0.12,0.35 0.75 0.55]);
 %     subplot('Position',[0.1, 0.55,0.85,0.4]);
+    hold on;
     plotFigureNBar(data,measure,groups,conditions,tags(measure-1));
     
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc',[fileName{measure-1},'.eps'],'-cmyk');
-    close gcf;
-    h2a.h2a([pwd,'\',fileName{measure-1},'.eps']);
+    print('-depsc',[fileName{measure-1},'.eps']);
+%     close gcf;
+%     h2a.h2a([pwd,'\',fileName{measure-1},'.eps']);
 end
 
 
@@ -38,32 +39,51 @@ end
             end
         end
         
-        pValues=ones(nGrp,1);
+%         pValues=ones(nGrp,1);
 %         groupDesc={'Wild type = ','VGAT-ChR2 = '};
-        for group=1:nGrp
-            anovaMat=cell2mat(resultCell(group,:));
-            if min(size(anovaMat))>1
-                [p,table,stats]=anova1(anovaMat,{'NoLaser','Q1','Q2','Q3','Q4'},'off');
-                pValues(group)=p;
-%                 fprintf('<tr><td class="stats"><p>F = %.4f</p><p>p = %.4f</p></td><td>%s%d</td></tr>\n',table{2,5},p,groupDesc{group},stats.n(1));
+%         for group=1:nGrp
+%             anovaMat=cell2mat(resultCell(group,:));
+%             if min(size(anovaMat))>1
+% %                 [p,table,stats]=anova1(anovaMat,{'NoLaser','Q1','Q2','Q3','Q4'},'off');
+%             
+%                 pValues(group)=p;
+% %                 fprintf('<tr><td class="stats"><p>F = %.4f</p><p>p = %.4f</p></td><td>%s%d</td></tr>\n',table{2,5},p,groupDesc{group},stats.n(1));
+%             end
+%         end
+        anovamat=[];
+        for gIdx=1:size(resultCell,1)
+            for lIdx=1:size(resultCell,2)
+                for mIdx=1:length(resultCell{gIdx,lIdx})
+                    if gIdx==2
+                        mDelta=length(resultCell{1,1});
+                    else
+                        mDelta=0;
+                    end
+                    anovamat=[anovamat;resultCell{gIdx,lIdx}(mIdx),gIdx,lIdx,mIdx+mDelta];
+                end
             end
         end
+        [SSQs, DFs, MSQs, Fs, Ps]=mixed_between_within_anova(anovamat);
+%         
+%         hold on;
         
+%         barw=0.5;
         
-        hold on;
-        
-        barw=0.5;
-        
-        barplot=zeros(nGrp,nCondition);
+%         barplot=zeros(nGrp,nCondition);
         sems=zeros(1,nGrp*nCondition);
         means=zeros(1,nGrp*nCondition);
+        colors={'k','b'};
         for group=1:nGrp
             for condition=1:nCondition
                 count=(group-1)*nCondition+condition;
                 means(count)=mean(resultCell{group,condition});
-                barplot(group,condition)=bar(count,means(count),barw);
-                sd=std(resultCell{group,condition});
-                sems(count)=sd/sqrt(size(resultCell{group,condition},1));
+                oneresult=resultCell{group,condition};
+                plot(count,means(count),'+','MarkerFaceColor','none','MarkerEdgeColor',colors{group},'MarkerSize',12,'LineWidth',2);
+                plot(count+rand(1,length(oneresult)).*0.6-0.3,oneresult,'o','MarkerFaceColor','none','MarkerEdgeColor',colors{group},'MarkerSize',4);
+                
+%                 barplot(group,condition)=bar(count,means(count),barw);
+%                 sd=std(resultCell{group,condition});
+%                 sems(count)=sd/sqrt(size(resultCell{group,condition},1));
             end
         end
         
@@ -78,47 +98,48 @@ end
                  categories{(group-1)*nCondition+condition}=[conditionTags{condition}];
             end
         end
-        groupColors={'k',zGetColor('b1')};
-        faceGroups=repmat({'k';zGetColor('b1')},1,5);
-        for group=1:nGrp
-            for condition=1:nCondition
-                set(barplot(group,condition),'EdgeColor',groupColors{group},'FaceColor',faceGroups{group,condition},'LineWidth',1.5);
-            end
-        end
-
-        currLim=ylim;
-        currLim(1)=currLim(1)-mod(currLim(1),10);
-        currLim(2)=currLim(2)-mod(currLim(2),10)+(mod(currLim(2),10)~=0)*10;
-        if min(means-sems)>70
-            currLim(1)=70;
-        end
-        ylim(currLim);
-        set(gca,'XTick',1:nGrp*nCondition,'XTickLabel',categories,'XColor','k','YColor','k','FontSize',10,'YTick',currLim(1):10:currLim(2));
-        ylabel(tag,'FontSize',12);
+%         groupColors={'k',zGetColor('b1')};
         
-        for group=1:nGrp
-%             pStr=p2Str(pValues(group));
-            if pValues(group)<0.05
-                pStr=sprintf('p = %.4f',p);
-            else
-                pStr='n.s.';
-            end
-            
-            x1=(group-1)*nCondition+1;
-            x2=x1+nCondition-1;
-            xm=mean([x1,x2]);
-            yspan=ylim;
-            dY=diff(yspan)*0.01;
-            top=yspan(2);
-            text(xm,top+7*dY,pStr,'FontSize',10,'HorizontalAlignment','center');
+%         for group=1:nGrp
+%             for condition=1:nCondition
+%                 set(barplot(group,condition),'EdgeColor',groupColors{group},'FaceColor',faceGroups{group,condition},'LineWidth',1.5);
+%             end
+%         end
+
+%         currLim=ylim;
+%         currLim(1)=currLim(1)-mod(currLim(1),10);
+%         currLim(2)=currLim(2)-mod(currLim(2),10)+(mod(currLim(2),10)~=0)*10;
+%         if min(means-sems)>70
+%             currLim(1)=70;
+%         end
+%         ylim(currLim);
+        ylim([55,100]);
+        set(gca,'XTick',1:nGrp*nCondition,'XTickLabel',categories,'XColor','k','YColor','k','FontSize',10,'YTick',60:20:100);
+        ylabel(tag,'FontSize',10);
+        
+%         for group=1:nGrp
+% %             pStr=p2Str(pValues(group));
 %             if pValues(group)<0.05
-                line([x1 x2],[top,top],'LineWidth',1,'Clipping','Off','Color','k');
+%                 pStr=sprintf('p = %.4f',p);
+%             else
+%                 pStr='n.s.';
+%             end
+            
+%             x1=(group-1)*nCondition+1;
+%             x2=x1+nCondition-1;
+%             xm=mean([x1,x2]);
+%             yspan=ylim;
+%             dY=diff(yspan)*0.01;
+%             top=yspan(2);
+%             text(xm,top+7*dY,pStr,'FontSize',10,'HorizontalAlignment','center');
+%             if pValues(group)<0.05
+%                 line([x1 x2],[top,top],'LineWidth',1,'Clipping','Off','Color','k');
 %                 line([x1 x1],[y-5,y-3],'LineWidth',1,'Clipping','Off','Color','k');
 %                 line([x2 x2],[y-5,y-3],'LineWidth',1,'Clipping','Off','Color','k');
 %             end
-        end
+%         end
         xlim([0,11]);
-        ylim(yspan);
+%         ylim(yspan);
         hold off
         
         

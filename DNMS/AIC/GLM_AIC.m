@@ -1,11 +1,11 @@
-load('dnmsfiles.mat')
-[allTrialsBase,perfBase]=stats_GLM(dnmsfiles.baseline);
-[allTrials5,perf5]=stats_GLM(dnmsfiles.delay5s);
-[allTrials8,perf8]=stats_GLM(dnmsfiles.delay8s);
-[allTrials12,perf12]=stats_GLM(dnmsfiles.delay12s);
-[allTrialsNoDelay,perfNoDelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
-[allTrialsNoLaser,perfNoLaser]=stats_GLM(dnmsfiles.noLaser,true);
-
+% load('dnmsfiles.mat')
+% [allTrialsBase,perfBase]=stats_GLM(dnmsfiles.baseline);
+% [allTrials5,perf5]=stats_GLM(dnmsfiles.delay5s);
+% [allTrials8,perf8]=stats_GLM(dnmsfiles.delay8s);
+% [allTrials12,perf12]=stats_GLM(dnmsfiles.delay12s);
+% [allTrialsNoDelay,perfNoDelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
+% [allTrialsNoLaser,perfNoLaser]=stats_GLM(dnmsfiles.noLaser,true);
+load('data4AIC.mat');
 fillIn=@(x,y) [x(:,1:8),repmat(y,size(x,1),1)];
 decay=@(x) 50-exp(-x/21.37)*50;
 
@@ -21,13 +21,25 @@ matchOdor=@(x,y) ismember(x,[2 5 7])==ismember(y,[2 5 7]);
 
 allTrials(:,end)=matchOdor(allTrials(:,1),allTrials(:,2));
 
-factors=cell(1,size(allTrials,2));
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% resample here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+rpt=500;
+AICs=nan(rpt,7);
+rsq=nan(rpt,7);
+mdlAIC=cell(rpt,7);
+
+parfor rptIdx=1:rpt
+    disp(rptIdx);
+resampTrials=datasample(allTrials,length(allTrials));
+
+factors=cell(1,size(resampTrials,2));
 for i=1:length(factors)
-    factors{i}=unique(allTrials(:,i))';
+    factors{i}=unique(resampTrials(:,i))';
 end
 
-dataMat=[];
 
+dataMat=[];
 for f1=factors{1}%col4 sample
     for f2=factors{2}%col5 test
         for f3=factors{3}%col6 laser
@@ -40,12 +52,12 @@ for f1=factors{1}%col4 sample
 %                                 for f9=factors{13} %N/A
 %                                  for f9=factors{7} %N/A
                                     for f10=factors{14} % match
-%                                         sel=all(allTrials(:,[1:3,8:14])==[f1 f2 f3 f4 f5 f6 f7 f8 f9 f10],2);
-                                         sel=all(allTrials(:,[1:3,8:11,14])==[f1 f2 f3 f4 f5 f6 f7,f10],2);
+%                                         sel=all(resampTrials(:,[1:3,8:14])==[f1 f2 f3 f4 f5 f6 f7 f8 f9 f10],2);
+                                         sel=all(resampTrials(:,[1:3,8:11,14])==[f1 f2 f3 f4 f5 f6 f7,f10],2);
                                         %                         disp(sum(sel)/length(sel));
                                         if nnz(sel)>0
-                                            perf=sum(allTrials(sel,4))*100/nnz(sel);
-                                            ci=bootci(100, @(x) sum(x)*100/length(x),allTrials(sel,4));
+                                            perf=sum(resampTrials(sel,4))*100/nnz(sel);
+                                            ci=bootci(100, @(x) sum(x)*100/length(x),resampTrials(sel,4));
 %                                             dataMat=[dataMat;perf,ci(1),ci(2),f1 f2 f3 f4 f5 f6 f7 f8 f9 f10];
                                             dataMat=[dataMat;perf,ci(1),ci(2),f1 f2 f3 f4 f5 f6 f7 0 0 f10];
                                         end
@@ -115,9 +127,8 @@ termsMatPBCtrl=[0 0 0 0 0  0  0  0  0  0  0;
     %     s t l g dl pd pb ps pt mt out
 
  
-y=double(dataMat(:,1));
-X=double(dataMat(:,4:13));
-% X=double(allTrials(:,1:3));
+
+% X=double(resampTrials(:,1:3));
 
 termsConst=[0 0 0 0 0  0  0  0  0  0  0];
 
@@ -211,32 +222,47 @@ termsNoInter=[0 0 0 0 0  0  0  0  0  0  0;
           0 0 1 1 0  0  1  0  0  0  0;
 
           ];
-      
+
 
 termsList={termsConst,termsSTM,termsSTMD,termsNoInter,termsMat,termsMatCompact,termsMatPBCtrl};
-AICs=nan(1,length(termsList));
-rsq=nan(1,length(termsList));
-for termsIdx=1:length(termsList)
-    mdlAIC{termsIdx}=fitglm(X,y,termsList{termsIdx},'Categorical',[1:4,6:10],'Distribution','normal',...
+
+y=double(dataMat(:,1));
+X=double(dataMat(:,4:13));
+
+for termsIdx=1:7%length(termsList)
+    mdlAIC{rptIdx,termsIdx}=fitglm(X,y,termsList{termsIdx},'Categorical',[1:4,6:10],'Distribution','normal',...
          'VarNames',{'Sample','Test','Laser','Genotype','Memory_decay','Perturb_Delay','Perturb_Baseline','Perturb_Sample','Perturb_Test','Match','Correct_rate'});
 
     % disp(mdl);
-    AICs(termsIdx)=mdlAIC{termsIdx}.ModelCriterion.AIC;
-    rsq(termsIdx)=mdlAIC{termsIdx}.Rsquared.Ordinary;
+    AICs(rptIdx,termsIdx)=mdlAIC{rptIdx,termsIdx}.ModelCriterion.AIC;
+    rsq(rptIdx,termsIdx)=mdlAIC{rptIdx,termsIdx}.Rsquared.Ordinary;
+end
+
 end
 figure('Color','w','Position',[400,400,175,210]);
 hold on;
 yyaxis left;
-plot(AICs,'-ro','LineWidth',1);
+
+ciAIC=bootci(100,@(x) mean(x), AICs);
+errorbar(1:7,mean(AICs),ciAIC(1,:)-mean(AICs),ciAIC(2,:)-mean(AICs),'r.','LineWidth',1);
+plot(mean(AICs),'-ro','LineWidth',1);
 set(gca,'YColor','k');
 ylabel('Akaike information criterion','FontSize',10);
 yyaxis right;
-plot(rsq,'-ko','LineWidth',1);
+
+cirsq=bootci(100,@(x) mean(x), rsq);
+errorbar(1:7,mean(rsq),cirsq(1,:)-mean(rsq),cirsq(2,:)-mean(rsq),'k.','LineWidth',1);
+plot(mean(rsq),'-ko','LineWidth',1);
 set(gca,'YColor','k');
 ylabel('R-squared','FontSize',10);
 set(gca,'XTick',1:7);
 xlabel('Model #','FontSize',10,'FontName','Helvetica','Color','k');
-xlim([0.5,length(termsList)+0.5]);
+% xlim([0.5,length(termsList)+0.5]);
+xlim([0.5,7.5]);
+
+savefig('AIC.fig');
+print('-depsc','-painters','AIC.eps');
+save('AIC.mat','AICs','rsq');
 
 % disp(mdl.Rsquared);
 % plotSlice(mdl);

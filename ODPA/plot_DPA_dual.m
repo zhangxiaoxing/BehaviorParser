@@ -1,9 +1,12 @@
 
 function perfDPA=plot_DPA_dual(infiles,outfile1,outfile2)
 % [~,perfDPA]=stats_New_Cri(ODPAfiles.DPA_delay_laser);
-[~,perfDPA]=stats_New_Cri(infiles);
+for distrType=1:2
+    disp(distrType);
+[~,perfDPA]=stats_New_Cri(infiles,distrType);
+assignin('base',sprintf('perfDPA_distr%d',distrType),perfDPA);
 
-close all;
+% close all;
 set(groot,'DefaultLineLineWidth',1);
 % figure('Color','w','Position',[100,100,150,180]);
 figure('Color','w','Position',[100,100,245,140]);
@@ -22,26 +25,35 @@ ylim([55,100]);
 % set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
 set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
 savefig([outfile1,'.fig']);
-print([outfile1,'.eps'],'-depsc','-r0');
-disp('ranksum hit');
+print(sprintf('%s_distr%d.eps',outfile1,distrType),'-depsc','-r0');
+disp('ranksum perf');
 disp(ranksum(perfDPA(perfDPA(:,3)==0,2)-perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==1,2)-perfDPA(perfDPA(:,3)==1,1)));
-disp('ranksum miss')
-disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,4:5),1,2),diff(perfDPA(perfDPA(:,3)==1,4:5),1,2)));
-disp('ranksum false')
-disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,6:7),1,2),diff(perfDPA(perfDPA(:,3)==1,6:7),1,2)));
-disp('ranksum lickEff')
-disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,9:10),1,2),diff(perfDPA(perfDPA(:,3)==1,9:10),1,2)));
-disp('ranksum d''')
-disp(ranksum(...
-diff(norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),1,2),...
-diff(norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+
+perf=perfDPA;[~,p]=adtest(diff(perf(perf(:,3)==1,1:2),1,2));
+fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
+
+perf=perfDPA;[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% return
 
 
+% disp('ranksum miss')
+% disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,4:5),1,2),diff(perfDPA(perfDPA(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,6:7),1,2),diff(perfDPA(perfDPA(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perfDPA(perfDPA(:,3)==0,9:10),1,2),diff(perfDPA(perfDPA(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+% 
 
-if exist('outfile2','var')
+
+if exist('outfile2','var')  && ~isempty(outfile2)
     disp('Miss, FA, LickEff, d''');
     
-    figure('Color','w','Position',[100,100,160,180]);
+    figure('Color','w','Position',[100,distrType*100,160,180]);
     hold on;
     plotOne([2,1],perfDPA(perfDPA(:,3)==0,4:5),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,4:5),'b');
@@ -50,7 +62,7 @@ if exist('outfile2','var')
     ylabel('Miss (%)','FontSize',10);
     
     
-    figure('Color','w','Position',[300,100,160,180]);
+    figure('Color','w','Position',[300,distrType*100,160,180]);
     hold on;    
     plotOne([2,1],perfDPA(perfDPA(:,3)==0,6:7),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,6:7),'b');
@@ -58,7 +70,7 @@ if exist('outfile2','var')
     xlim([0,6]);
     ylabel('False alarm (%)','FontSize',10);
 
-    figure('Color','w','Position',[500,100,160,180]);
+    figure('Color','w','Position',[500,distrType*100,160,180]);
     hold on;    
     plotOne([2,1],perfDPA(perfDPA(:,3)==0,9:10),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,9:10),'b');
@@ -66,7 +78,7 @@ if exist('outfile2','var')
     xlim([0,6]);
     ylabel('Lick efficiency (%)','FontSize',10);
     
-    figure('Color','w','Position',[700,100,160,180]);
+    figure('Color','w','Position',[700,distrType*100,160,180]);
     hold on;
     plotOne([2,1],norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),'k');
     plotOne([4,3]+1,norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),'b');
@@ -95,9 +107,10 @@ end
 % anovan(toN(:,1),{toN(:,2),toN(:,3)},'model','interaction','varnames',{'Gene','Laser'});
 
 end
+end
 
 
-function [allTrial,perMice]=stats_New_Cri(files)
+function [allTrial,perMice]=stats_New_Cri(files,distrType)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -139,19 +152,22 @@ for mice=1:length(ids)
             if numel(facSeq)<10
                 continue;
             end
-            facSeq(:,15)=facSeq(:,7);
+
             if numel(facSeq)<50
                 z.setFullSession(48);
                 z.processFile(strtrim(f(fidx,:)));
                 facSeq=z.getFactorSeq();
                 z.setFullSession(24);
             end
+            facSeq(:,15)=facSeq(:,7);
+            facSeq(:,16)=facSeq(:,5);
 %             fprintf('%d, %s\n',numel(facSeq),f(fidx,:));
             facSeq=clearBadPerf(facSeq);
 %             facSeq=facSeq(ismember(facSeq(:,6),[3 6]),:);
             if length(facSeq)<50
                 continue;
             end
+            
 
 
             facSeq(facSeq(:,4)==3 | facSeq(:,4)==5,5)=1;%lick
@@ -164,6 +180,9 @@ for mice=1:length(ids)
                 
 
             facSeq(:,8)=ismember(ids{mice},optoPos);
+            if exist('distrType','var') && ~isempty(distrType)
+                facSeq=facSeq(facSeq(:,16)==distrType,:);
+            end
             
             allTrial=[allTrial;facSeq];
             oneMice=[oneMice;facSeq];
@@ -254,4 +273,14 @@ for i=1:rpt
 end
 p=nnz(permDiff>currDiff)/rpt;
 
+end
+
+function out=rearrange(ctrlOff,ctrlOn,optoOff,optoOn)
+out=[ctrlOff,repmat([1,1],length(ctrlOff),1),(1:length(ctrlOff))'];
+out=[out;
+    ctrlOn,repmat([1,2],length(ctrlOff),1),(1:length(ctrlOff))'];
+out=[out;
+    optoOff,repmat([2,1],length(optoOff),1),(1:length(optoOff))'+length(ctrlOff)];
+out=[out;
+    optoOn,repmat([2,2],length(optoOff),1),(1:length(optoOff))'+length(ctrlOff)];
 end

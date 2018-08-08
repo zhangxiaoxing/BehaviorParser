@@ -1,11 +1,15 @@
-function [allTrial,perMice]=stats_GLM(files,suppressLaser)
+function [allTrial,perMice]=stats_GLM(files,suppressLaser,isGNG)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
     javaaddpath('I:\java\zmat\build\classes\');
 end
 
-z=zmat.Zmat;
+if exist('isGNG','var') && isGNG
+    z=zmat.ZmatGNG;
+else
+    z=zmat.Zmat;
+end
 z.setFullSession(0);
 
 ids=unique(cellfun(@(x) x{1},regexp(files,'\\(\w{0,1}\d{1,4})_','tokens','once'),'UniformOutput',false));
@@ -43,7 +47,7 @@ for mice=1:length(ids)
         for fidx=1:size(f,1)
             z.processFile(f(fidx,:));
             facSeq=z.getFactorSeq(false);
-            if exist('suppressLaser','var') && suppressLaser
+            if exist('suppressLaser','var') &&(~isempty(suppressLaser)) && suppressLaser
                 facSeq(:,3)=0;
             end
 %             facSeq(:,6)=1:size(facSeq,1);
