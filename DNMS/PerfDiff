@@ -1,0 +1,26 @@
+
+mean(cell2mat(EachQuarter(strcmp(EachQuarter(:,6),'ChR2') & strcmp(EachQuarter(:,5),'4Q'),2)))
+
+ans =
+
+   82.8961
+
+mean(cell2mat(EachQuarter(strcmp(EachQuarter(:,6),'ChR2') & strcmp(EachQuarter(:,5),'NoLaser'),2)))
+
+ans =
+
+   88.5541
+   
+   mean(perf5(perf5(:,3)==1,[1 2]))
+
+ans =
+
+   85.0895   89.5789
+  
+   
+   mean(perf8(perf8(:,3)==1,[1 2]))
+
+ans =
+
+   82.6412   88.1805
+   

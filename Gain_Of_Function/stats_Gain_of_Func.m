@@ -4,7 +4,7 @@ dpath=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',dpath)
     javaaddpath('I:\java\zmat\build\classes\');
 end
-path(path,'I:\behavior\reports\z');
+addpath('D:\Behavior\reports\extern_lib\');
 z=zmat.Zmat;
 optoPos={'A32','A33','A34', 'A37', 'A40', 'A42', 'A46', 'A47', 'A48','S1','S5','S6','S12','S16','S24','S32','S31','S33','S34'};
 ids=regexp(files(:,1),'(?<=\\)\w?\d{1,4}(?=_)','match','once');
@@ -13,7 +13,7 @@ perf=nan(n,10);
 perf(:,1)=str2num(char(regexp(ids,'\d*','match','once')));
 perf(:,2)=ismember(ids,optoPos);
 
-false=perf;
+FA=perf;
 miss=perf;
 dpc=perf;
 lickEff=perf;
@@ -25,7 +25,7 @@ for mouse=1:size(files,1)
         
         z.processFile(files{mouse,date-2});
         
-        tOn=double(sum(z.getPerf(true,200)));
+        tOn=double(sum(z.getPerf(true,200,false)));
         
         if numel(tOn)<7
             disp(files{mouse,date-2});
@@ -35,7 +35,7 @@ for mouse=1:size(files,1)
             mss=tOn(2)*100/(tOn(1)+tOn(2));
             
             perf(mouse,date)=(tOn(1)+tOn(4))*100/tOn(5);
-            false(mouse,date)=fas;
+            FA(mouse,date)=fas;
             miss(mouse,date)=mss;
             dpc(mouse,date)=calcDpc(fas,mss);
             lickEff(mouse,date)=tOn(6)*100/(tOn(6)+tOn(7));
@@ -44,7 +44,7 @@ for mouse=1:size(files,1)
 end
 
 out.perf=perf;
-out.false=false;
+out.FA=FA;
 out.miss=miss;
 out.dpc=dpc;
 out.lickEff=lickEff;

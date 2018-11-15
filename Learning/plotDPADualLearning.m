@@ -32,7 +32,7 @@ savePlots();
     function hd=plotDPA(data)
         plot((1:dpaDay)*288-144,data(:,3:end),'-','Color',[0.8,0.8,0.8],'LineWidth',1);
         hd=plot((1:dpaDay)*288-144,mean(data(:,3:end)),'-ko','MarkerSize',3,'LineWidth',1,'MarkerFaceColor','k');
-        ci=bootci(100,@(x) mean(x),data(:,3:end))-mean(data(:,3:end));
+        ci=bootci(1000,@(x) mean(x),data(:,3:end))-mean(data(:,3:end));
         errorbar((1:dpaDay)*288-144,mean(data(:,3:end)),ci(1,:),ci(2,:),'k','LineWidth',1);
     end
 
@@ -41,14 +41,14 @@ savePlots();
 %         rectangle('Position',[4*288+1,50,4*288,50],'FaceColor',[0.9,0.9,0.9],'EdgeColor','none');
         plot((1:dpaDay)*288-144+dpaDay*288,data(:,3:end),'-','Color',[1,0.8,0.8],'LineWidth',1);
         hd=plot((1:dpaDay)*288-144+dpaDay*288,mean(data(:,3:end)),'-ro','LineWidth',1,'MarkerFaceColor','r','MarkerSize',3);
-        ci=bootci(100,@(x) mean(x),data(:,3:end))-mean(data(:,3:end));
+        ci=bootci(1000,@(x) mean(x),data(:,3:end))-mean(data(:,3:end));
         errorbar((1:dpaDay)*288-144+dpaDay*288,mean(data(:,3:end)),ci(1,:),ci(2,:),'r','LineWidth',1);
     end
 
     function hg=plotDualGNG(data)
         plot((1:dpaDay)*288-144+dpaDay*288,data(:,3:end),'-','Color',[0.8,0.8,1],'LineWidth',1);
         hg=plot((1:dpaDay)*288-144+dpaDay*288,mean(data(:,3:end)),'-bo','LineWidth',1,'MarkerFaceColor','b','MarkerSize',3);
-        ci=bootci(100,@(x) mean(x),data(:,3:end))-mean(data(:,3:end));
+        ci=bootci(1000,@(x) mean(x),data(:,3:end))-mean(data(:,3:end));
         errorbar((1:dpaDay)*288-144+dpaDay*288,mean(data(:,3:end)),ci(1,:),ci(2,:),'b','LineWidth',1);
     end
 

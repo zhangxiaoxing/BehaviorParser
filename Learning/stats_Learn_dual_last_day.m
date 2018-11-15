@@ -62,13 +62,13 @@ arrayfun(@(i) plot(x+(rand*0.5-0.25),y(i,:),'Color',getColor(i)),1:size(y,1));
 
 % plot((x+randd(y))',y',sprintf('-%s.',pColor));
 
-ci=bootci(100,@(x) mean(x), y(:,1));
+ci=bootci(1000,@(x) mean(x), y(:,1));
 plot(x([1,1]),ci,sprintf('-%s',pColor),'LineWidth',1);
 % disp(ci)
-ci=bootci(100,@(x) mean(x), y(:,2));
+ci=bootci(1000,@(x) mean(x), y(:,2));
 plot(x([2,2]),ci,sprintf('-%s',pColor),'LineWidth',1);
 
-ci=bootci(100,@(x) mean(x), y(:,3));
+ci=bootci(1000,@(x) mean(x), y(:,3));
 plot(x([3,3]),ci,sprintf('-%s',pColor),'LineWidth',1);
 
 plot(x,mean(y),sprintf('-%so',pColor),'LineWidth',1,'MarkerFaceColor','k','MarkerSize',4);

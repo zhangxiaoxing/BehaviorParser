@@ -1,10 +1,12 @@
 
-function perfDPA=plot_DPA_dual(infiles,outfile1,outfile2)
+function out=plot_DPA_dual(infiles,outfile1,outfile2,wtCriteria)
 % [~,perfDPA]=stats_New_Cri(ODPAfiles.DPA_delay_laser);
-for distrType=1:2
-    disp(distrType);
-[~,perfDPA]=stats_New_Cri(infiles,distrType);
-assignin('base',sprintf('perfDPA_distr%d',distrType),perfDPA);
+% for distrType=1%:2
+%     disp(distrType);
+[~,perfDPA]=stats_New_Cri(infiles,[],wtCriteria);
+% out{distrType}=perfDPA;
+out=perfDPA;
+assignin('base','perfDPA_distr',perfDPA);
 
 % close all;
 set(groot,'DefaultLineLineWidth',1);
@@ -15,24 +17,27 @@ plotOne([2,1],perfDPA(perfDPA(:,3)==0,1:2),'k');
 plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,1:2),'b');
 % [~,pn]=ttest(perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==0,2));
 % [~,p]=ttest(perfDPA(perfDPA(:,3)==1,1),perfDPA(perfDPA(:,3)==1,2));
-
 xlim([0,6]);
 ylim([55,100]);
-% ylim([65,100]);
-
 % plot([12,12],ylim(),':k','LineWidth',1);
-
 % set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
+
+
+
+perf=perfDPA;
 set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
 savefig([outfile1,'.fig']);
-print(sprintf('%s_distr%d.eps',outfile1,distrType),'-depsc','-r0');
+print(sprintf('%s_distr.eps',outfile1),'-depsc','-r0');
+
+
+
 disp('ranksum perf');
 disp(ranksum(perfDPA(perfDPA(:,3)==0,2)-perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==1,2)-perfDPA(perfDPA(:,3)==1,1)));
 
-perf=perfDPA;[~,p]=adtest(diff(perf(perf(:,3)==1,1:2),1,2));
+[~,p]=adtest(diff(perf(perf(:,3)==1,1:2),1,2));
 fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
 
-perf=perfDPA;[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
 fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
 % return
 
@@ -48,44 +53,66 @@ fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= 
 % diff(norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),1,2),...
 % diff(norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),1,2)));
 % 
+   
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+fprintf('Dual Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+fprintf('Dual FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+fprintf('Dual LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(...
+norminv((1-(perfDPA(perfDPA(:,3)==0,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6)./100*0.98+0.01),...
+norminv((1-(perfDPA(perfDPA(:,3)==0,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,7)./100*0.98+0.01),...
+norminv((1-(perfDPA(perfDPA(:,3)==1,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6)./100*0.98+0.01),...
+norminv((1-(perfDPA(perfDPA(:,3)==1,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,7)./100*0.98+0.01)...
+));
+fprintf('Dual DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
 
 
 if exist('outfile2','var')  && ~isempty(outfile2)
     disp('Miss, FA, LickEff, d''');
     
-    figure('Color','w','Position',[100,distrType*100,160,180]);
+    figure('Color','w','Position',[100,100,160,180]);
     hold on;
     plotOne([2,1],perfDPA(perfDPA(:,3)==0,4:5),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,4:5),'b');
     set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
     xlim([0,6]);
+    ylim([0,50]);
     ylabel('Miss (%)','FontSize',10);
+    print('-depsc','-painters','-r0',sprintf('MissDual_%s.eps',outfile2));
     
     
-    figure('Color','w','Position',[300,distrType*100,160,180]);
+
+    figure('Color','w','Position',[300,100,160,180]);
     hold on;    
     plotOne([2,1],perfDPA(perfDPA(:,3)==0,6:7),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,6:7),'b');
     set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
     xlim([0,6]);
+    ylim([0,100]);
     ylabel('False alarm (%)','FontSize',10);
+    print('-depsc','-painters','-r0',sprintf('FADual_%s.eps',outfile2));
 
-    figure('Color','w','Position',[500,distrType*100,160,180]);
+    figure('Color','w','Position',[500,100,160,180]);
     hold on;    
     plotOne([2,1],perfDPA(perfDPA(:,3)==0,9:10),'k');
     plotOne([4,3]+1,perfDPA(perfDPA(:,3)==1,9:10),'b');
     set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
     xlim([0,6]);
+    ylim([50,100]);
     ylabel('Lick efficiency (%)','FontSize',10);
+    print('-depsc','-painters','-r0',sprintf('LickEffDual_%s.eps',outfile2));
     
-    figure('Color','w','Position',[700,distrType*100,160,180]);
+    figure('Color','w','Position',[700,100,160,180]);
     hold on;
     plotOne([2,1],norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),'k');
     plotOne([4,3]+1,norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),'b');
     set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
     xlim([0,6]);
+    ylim([0,5]);
     ylabel('Sensitivity index (d'')','FontSize',10);
-    
+    print('-depsc','-painters','-r0',sprintf('DPrimeDual_%s.eps',outfile2));
 %     savefig([outfile2,'.fig']);
 %     print([outfile2,'.eps'],'-depsc','-r0');
     
@@ -106,11 +133,11 @@ end
 % fprintf('ttest WT %.3f, ttest ChR2 %.3f\n',pn,p);
 % anovan(toN(:,1),{toN(:,2),toN(:,3)},'model','interaction','varnames',{'Gene','Laser'});
 
-end
+% end
 end
 
 
-function [allTrial,perMice]=stats_New_Cri(files,distrType)
+function [allTrial,perMice]=stats_New_Cri(files,distrType,wtCriteria)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -153,16 +180,16 @@ for mice=1:length(ids)
                 continue;
             end
 
-            if numel(facSeq)<50
-                z.setFullSession(48);
-                z.processFile(strtrim(f(fidx,:)));
-                facSeq=z.getFactorSeq();
-                z.setFullSession(24);
-            end
+%             if numel(facSeq)<50
+%                 z.setFullSession(48);
+%                 z.processFile(strtrim(f(fidx,:)));
+%                 facSeq=z.getFactorSeq();
+%                 z.setFullSession(24);
+%             end
             facSeq(:,15)=facSeq(:,7);
             facSeq(:,16)=facSeq(:,5);
 %             fprintf('%d, %s\n',numel(facSeq),f(fidx,:));
-            facSeq=clearBadPerf(facSeq);
+            facSeq=clearBadPerf(facSeq,wtCriteria);
 %             facSeq=facSeq(ismember(facSeq(:,6),[3 6]),:);
             if length(facSeq)<50
                 continue;
@@ -181,7 +208,7 @@ for mice=1:length(ids)
 
             facSeq(:,8)=ismember(ids{mice},optoPos);
             if exist('distrType','var') && ~isempty(distrType)
-                facSeq=facSeq(facSeq(:,16)==distrType,:);
+                facSeq=facSeq(ismember(facSeq(:,16),distrType),:);
             end
             
             allTrial=[allTrial;facSeq];
@@ -215,14 +242,14 @@ end
 
 
 
-function out=clearBadPerf(facSeq)
+function out=clearBadPerf(facSeq,wtCriteria)
 
     if length(facSeq)>=80
         facSeq(:,5)=0;
         i=80;
         while i<length(facSeq)
             goodOff=sum((facSeq(i-79:i,4)==3 | facSeq(i-79:i,4)==6)& facSeq(i-79:i,3)==0);
-            if goodOff>=40*80/100  % well trained criteria
+            if goodOff>=40*wtCriteria/100  % well trained criteria
                 facSeq(i-79:i,5)=1;
             end
             i=i+1;
@@ -244,10 +271,10 @@ plot((x+randd(y))',y',sprintf('-%s.',pColor));
 [~,p]=ttest(y(:,1),y(:,2));
 disp(p);
 
-ci=bootci(100,@(x) mean(x), y(:,2));
+ci=bootci(1000,@(x) mean(x), y(:,2));
 plot([x(2)-dd,x(2)-dd],ci,sprintf('-%s',pColor),'LineWidth',1);
 
-ci=bootci(100,@(x) mean(x), y(:,1));
+ci=bootci(1000,@(x) mean(x), y(:,1));
 plot([x(1)+dd,x(1)+dd],ci,sprintf('-%s',pColor),'LineWidth',1);
 
 plot(x(2)-dd,mean(y(:,2)),sprintf('%so',pColor),'MarkerFaceColor','w','MarkerSize',4,'LineWidth',1);

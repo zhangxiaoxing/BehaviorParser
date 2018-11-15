@@ -31,197 +31,193 @@ mdlAIC=cell(rpt,7);
 
 parfor rptIdx=1:rpt
     disp(rptIdx);
-resampTrials=datasample(allTrials,length(allTrials));
-
-factors=cell(1,size(resampTrials,2));
-for i=1:length(factors)
-    factors{i}=unique(resampTrials(:,i))';
-end
-
-
-dataMat=[];
-for f1=factors{1}%col4 sample
-    for f2=factors{2}%col5 test
-        for f3=factors{3}%col6 laser
-            for f4=factors{8}%col7 geno
-                for f5=factors{9}%col8 decay
-                    for f6=factors{10}%col9 purtb delay
-                        for f7=factors{11} %col 10 perturb base
-%                             for f8=factors{12} %N/A
-%                              for f8=factors{6} %Prev_Correct
-%                                 for f9=factors{13} %N/A
-%                                  for f9=factors{7} %N/A
-                                    for f10=factors{14} % match
-%                                         sel=all(resampTrials(:,[1:3,8:14])==[f1 f2 f3 f4 f5 f6 f7 f8 f9 f10],2);
-                                         sel=all(resampTrials(:,[1:3,8:11,14])==[f1 f2 f3 f4 f5 f6 f7,f10],2);
-                                        %                         disp(sum(sel)/length(sel));
-                                        if nnz(sel)>0
-                                            perf=sum(resampTrials(sel,4))*100/nnz(sel);
-                                            ci=bootci(100, @(x) sum(x)*100/length(x),resampTrials(sel,4));
-%                                             dataMat=[dataMat;perf,ci(1),ci(2),f1 f2 f3 f4 f5 f6 f7 f8 f9 f10];
-                                            dataMat=[dataMat;perf,ci(1),ci(2),f1 f2 f3 f4 f5 f6 f7 0 0 f10];
-                                        end
+    resampTrials=datasample(allTrials,length(allTrials));
+    
+    factors=cell(1,size(resampTrials,2));
+    for i=1:length(factors)
+        factors{i}=unique(resampTrials(:,i))';
+    end
+    
+    
+    dataMat=[];
+    for f1=factors{1}%col4 sample
+        for f2=factors{2}%col5 test
+            for f3=factors{3}%col6 laser
+                for f4=factors{8}%col7 geno
+                    for f5=factors{9}%col8 decay
+                        for f6=factors{10}%col9 purtb delay
+                            for f7=factors{11} %col 10 perturb base
+                                for f10=factors{14} % match
+                                    %                                         sel=all(resampTrials(:,[1:3,8:14])==[f1 f2 f3 f4 f5 f6 f7 f8 f9 f10],2);
+                                    sel=all(resampTrials(:,[1:3,8:11,14])==[f1 f2 f3 f4 f5 f6 f7,f10],2);
+                                    %                         disp(sum(sel)/length(sel));
+                                    if nnz(sel)>0
+                                        perf=sum(resampTrials(sel,4))*100/nnz(sel);
+                                        ci=bootci(100, @(x) sum(x)*100/length(x),resampTrials(sel,4));
+                                        %                                             dataMat=[dataMat;perf,ci(1),ci(2),f1 f2 f3 f4 f5 f6 f7 f8 f9 f10];
+                                        dataMat=[dataMat;perf,ci(1),ci(2),f1 f2 f3 f4 f5 f6 f7 0 0 f10];
                                     end
-%                                 end
-%                             end
+                                end
+                                %                                 end
+                                %                             end
+                            end
                         end
                     end
                 end
             end
         end
     end
-end
-
+    
     %     s t l g dl pd pb ps pt mt out
-    %                     prevprev          
+    %                     prevprev
     %                     corrlick
-termsMat=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
-% 
-          0 0 1 0 0  0  0  0  0  0  0;
-          0 0 0 1 0  0  0  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 0 0 0  0  1  0  0  0  0;
-          0 0 0 0 0  1  0  0  0  0  0;
-%           0 0 0 0 0  0  0  1  0  0  0;
-%           0 0 0 0 0  0  0  0  1  0  0;
+    termsMat=[0 0 0 0 0  0  0  0  0  0  0;
+        1 0 0 0 0  0  0  0  0  0  0;
+        0 1 0 0 0  0  0  0  0  0  0;
+        %
+        0 0 1 0 0  0  0  0  0  0  0;
+        0 0 0 1 0  0  0  0  0  0  0;
+        0 0 0 0 0  0  0  0  0  1  0;
+        0 0 0 0 1  0  0  0  0  0  0;
+        0 0 0 0 0  0  1  0  0  0  0;
+        0 0 0 0 0  1  0  0  0  0  0;
+        %           0 0 0 0 0  0  0  1  0  0  0;
+        %           0 0 0 0 0  0  0  0  1  0  0;
+        
+        %           0 0 1 1 0  0  0  0  0  0  0;
+        %           0 0 1 0 0  1  0  0  0  0  0;
+        %           0 0 1 0 0  0  1  0  0  0  0;
+        %
+        %           0 0 0 1 0  1  0  0  0  0  0;
+        %           0 0 0 1 0  0  1  0  0  0  0;
+        %
+        %           0 0 1 1 0  1  0  0  0  0  0;
+        
+        
+        
+        0 0 1 1 1  1  0  0  0  0  0;
+        0 0 1 1 0  0  1  0  0  0  0;
+        
+        ];
+    
+    termsMatCompact=[0 0 0 0 0  0  0  0  0  0  0;
+        
+    0 0 0 0 0  0  0  0  0  1  0;
+    0 0 0 0 1  0  0  0  0  0  0;
+    0 0 1 1 1  1  0  0  0  0  0;
+    ];
+%     s t l g dl pd pb ps pt mt out
+%                     prevprev
+%                     corrlick
 
-%           0 0 1 1 0  0  0  0  0  0  0;
-%           0 0 1 0 0  1  0  0  0  0  0;
-%           0 0 1 0 0  0  1  0  0  0  0;
-%           
-%           0 0 0 1 0  1  0  0  0  0  0;
-%           0 0 0 1 0  0  1  0  0  0  0;
-%           
-%           0 0 1 1 0  1  0  0  0  0  0;
-
-
-
-          0 0 1 1 1  1  0  0  0  0  0;
-          0 0 1 1 0  0  1  0  0  0  0;
-
-          ];
-      
-termsMatCompact=[0 0 0 0 0  0  0  0  0  0  0;
-
-          0 0 0 0 0  0  0  0  0  1  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 1 1 1  1  0  0  0  0  0;
-              ];
-    %     s t l g dl pd pb ps pt mt out
-    %                     prevprev          
-    %                     corrlick
-      
 termsMatPBCtrl=[0 0 0 0 0  0  0  0  0  0  0;
-
-          0 0 0 0 0  0  0  0  0  1  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 1 1 0  0  1  0  0  0  0;
-          ];      
-      
-
+    
+0 0 0 0 0  0  0  0  0  1  0;
+0 0 0 0 1  0  0  0  0  0  0;
+0 0 1 1 0  0  1  0  0  0  0;
+];
 
 
-    %     s t l g dl pd pb ps pt mt out
 
- 
+
+%     s t l g dl pd pb ps pt mt out
+
+
 
 % X=double(resampTrials(:,1:3));
 
 termsConst=[0 0 0 0 0  0  0  0  0  0  0];
 
 termsSTM=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0];
-          
-      
+    1 0 0 0 0  0  0  0  0  0  0;
+    0 1 0 0 0  0  0  0  0  0  0;
+    0 0 0 0 0  0  0  0  0  1  0];
 
-    %     s t l g dl pd pb ps pt mt out
+
+
+%     s t l g dl pd pb ps pt mt out
 
 termsSTMD=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0];
-      
-      
+    1 0 0 0 0  0  0  0  0  0  0;
+    0 1 0 0 0  0  0  0  0  0  0;
+    0 0 0 0 1  0  0  0  0  0  0;
+    0 0 0 0 0  0  0  0  0  1  0];
+
+
 termsNoInter=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 0 0 0  1  0  0  0  0  0;
-          0 0 0 0 0  0  1  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0]; 
+    1 0 0 0 0  0  0  0  0  0  0;
+    0 1 0 0 0  0  0  0  0  0  0;
+    0 0 0 0 1  0  0  0  0  0  0;
+    0 0 0 0 0  1  0  0  0  0  0;
+    0 0 0 0 0  0  1  0  0  0  0;
+    0 0 0 0 0  0  0  0  0  1  0];
 
-      terms2InterMat=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
- 
-          0 0 1 0 0  0  0  0  0  0  0;
-          0 0 0 1 0  0  0  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 0 0 0  0  1  0  0  0  0;
-          0 0 0 0 0  1  0  0  0  0  0;
-
-
-          0 0 1 1 0  0  0  0  0  0  0;
-          0 0 1 0 0  1  0  0  0  0  0;
-          0 0 1 0 0  0  1  0  0  0  0;
-          
-          0 0 0 1 0  1  0  0  0  0  0;
-          0 0 0 1 0  0  1  0  0  0  0;
-        
-%           0 0 1 1 0  1  0  0  0  0  0;
-
-
-
-          0 0 1 1 1  1  0  0  0  0  0;
-          0 0 1 1 0  0  1  0  0  0  0;
-
-          ];
-  
-      
-      termsNoInter=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 0 0 0  1  0  0  0  0  0;
-          0 0 0 0 0  0  1  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0]; 
-
-      terms3InterMat=[0 0 0 0 0  0  0  0  0  0  0;
-          1 0 0 0 0  0  0  0  0  0  0;
-          0 1 0 0 0  0  0  0  0  0  0;
- 
-          0 0 1 0 0  0  0  0  0  0  0;
-          0 0 0 1 0  0  0  0  0  0  0;
-          0 0 0 0 0  0  0  0  0  1  0;
-          0 0 0 0 1  0  0  0  0  0  0;
-          0 0 0 0 0  0  1  0  0  0  0;
-          0 0 0 0 0  1  0  0  0  0  0;
+terms2InterMat=[0 0 0 0 0  0  0  0  0  0  0;
+    1 0 0 0 0  0  0  0  0  0  0;
+    0 1 0 0 0  0  0  0  0  0  0;
+    
+    0 0 1 0 0  0  0  0  0  0  0;
+    0 0 0 1 0  0  0  0  0  0  0;
+    0 0 0 0 0  0  0  0  0  1  0;
+    0 0 0 0 1  0  0  0  0  0  0;
+    0 0 0 0 0  0  1  0  0  0  0;
+    0 0 0 0 0  1  0  0  0  0  0;
+    
+    
+    0 0 1 1 0  0  0  0  0  0  0;
+    0 0 1 0 0  1  0  0  0  0  0;
+    0 0 1 0 0  0  1  0  0  0  0;
+    
+    0 0 0 1 0  1  0  0  0  0  0;
+    0 0 0 1 0  0  1  0  0  0  0;
+    
+    %           0 0 1 1 0  1  0  0  0  0  0;
+    
+    
+    
+    0 0 1 1 1  1  0  0  0  0  0;
+    0 0 1 1 0  0  1  0  0  0  0;
+    
+    ];
 
 
-          0 0 1 1 0  0  0  0  0  0  0;
-          0 0 1 0 0  1  0  0  0  0  0;
-          0 0 1 0 0  0  1  0  0  0  0;
-          
-          0 0 0 1 0  1  0  0  0  0  0;
-          0 0 0 1 0  0  1  0  0  0  0;
-        
-          0 0 1 1 0  1  0  0  0  0  0;
-          0 0 0 1 1  1  0  0  0  0  0;
-          0 0 1 0 1  1  0  0  0  0  0;
-          0 0 1 1 1  0  0  0  0  0  0;
+termsNoInter=[0 0 0 0 0  0  0  0  0  0  0;
+    1 0 0 0 0  0  0  0  0  0  0;
+    0 1 0 0 0  0  0  0  0  0  0;
+    0 0 0 0 1  0  0  0  0  0  0;
+    0 0 0 0 0  1  0  0  0  0  0;
+    0 0 0 0 0  0  1  0  0  0  0;
+    0 0 0 0 0  0  0  0  0  1  0];
 
-
-          0 0 1 1 1  1  0  0  0  0  0;
-          0 0 1 1 0  0  1  0  0  0  0;
-
-          ];
+terms3InterMat=[0 0 0 0 0  0  0  0  0  0  0;
+    1 0 0 0 0  0  0  0  0  0  0;
+    0 1 0 0 0  0  0  0  0  0  0;
+    
+    0 0 1 0 0  0  0  0  0  0  0;
+    0 0 0 1 0  0  0  0  0  0  0;
+    0 0 0 0 0  0  0  0  0  1  0;
+    0 0 0 0 1  0  0  0  0  0  0;
+    0 0 0 0 0  0  1  0  0  0  0;
+    0 0 0 0 0  1  0  0  0  0  0;
+    
+    
+    0 0 1 1 0  0  0  0  0  0  0;
+    0 0 1 0 0  1  0  0  0  0  0;
+    0 0 1 0 0  0  1  0  0  0  0;
+    
+    0 0 0 1 0  1  0  0  0  0  0;
+    0 0 0 1 0  0  1  0  0  0  0;
+    
+    0 0 1 1 0  1  0  0  0  0  0;
+    0 0 0 1 1  1  0  0  0  0  0;
+    0 0 1 0 1  1  0  0  0  0  0;
+    0 0 1 1 1  0  0  0  0  0  0;
+    
+    
+    0 0 1 1 1  1  0  0  0  0  0;
+    0 0 1 1 0  0  1  0  0  0  0;
+    
+    ];
 
 
 termsList={termsConst,termsSTM,termsSTMD,termsNoInter,termsMat,termsMatCompact,termsMatPBCtrl};
@@ -231,8 +227,8 @@ X=double(dataMat(:,4:13));
 
 for termsIdx=1:7%length(termsList)
     mdlAIC{rptIdx,termsIdx}=fitglm(X,y,termsList{termsIdx},'Categorical',[1:4,6:10],'Distribution','normal',...
-         'VarNames',{'Sample','Test','Laser','Genotype','Memory_decay','Perturb_Delay','Perturb_Baseline','Perturb_Sample','Perturb_Test','Match','Correct_rate'});
-
+        'VarNames',{'Sample','Test','Laser','Genotype','Memory_decay','Perturb_Delay','Perturb_Baseline','Perturb_Sample','Perturb_Test','Match','Correct_rate'});
+    
     % disp(mdl);
     AICs(rptIdx,termsIdx)=mdlAIC{rptIdx,termsIdx}.ModelCriterion.AIC;
     rsq(rptIdx,termsIdx)=mdlAIC{rptIdx,termsIdx}.Rsquared.Ordinary;
@@ -266,7 +262,7 @@ save('AIC.mat','AICs','rsq');
 
 % disp(mdl.Rsquared);
 % plotSlice(mdl);
-% 
+%
 
 % save('glmModel.mat','mdl');
 % savefig('GLMFit.fig');
