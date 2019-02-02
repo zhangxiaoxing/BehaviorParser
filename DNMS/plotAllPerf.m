@@ -1,143 +1,189 @@
 addpath('D:\Behavior\reports\extern_lib');
+close all;
+set(groot,'DefaultLineLineWidth',1);
 
-
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%% Fig.1 Perf 12 8 5 %%%%%%%%%%%%%%%%%%%
 % 
 % % % 
-% close all;
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
-% plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
-% xlim([0,6]);
-% ylim([55,100]);
-% ylabel('Correct Rate (%)','FontSize',10);
-% print('-depsc','-painters','-r0','perf5s.eps');
-% 
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perf8(perf8(:,3)==0,1:2),'k');
-% plotOne([4,3]+1,perf8(perf8(:,3)==1,1:2),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
-% xlim([0,6]);
-% ylim([55,100]);ylabel('Correct Rate (%)','FontSize',10);
-% print('-depsc','-painters','-r0','perf8s.eps');
-% 
-% 
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perf12(perf12(:,3)==0,1:2),'k');
-% plotOne([4,3]+1,perf12(perf12(:,3)==1,1:2),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
-% xlim([0,6]);
-% ylim([55,100]);
-% ylabel('Correct Rate (%)','FontSize',10);
+if  (exist('plotParts','var') && ismember(1,plotParts)) || ~exist('plotParts','var')
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct Rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perf5s.eps');
+
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf8(perf8(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perf8(perf8(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
+xlim([0,6]);
+ylim([55,100]);ylabel('Correct Rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perf8s.eps');
+
+
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf12(perf12(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perf12(perf12(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'},'FontSize',10,'YTick',60:20:100);
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct Rate (%)','FontSize',10);
 % print('-depsc','-painters','-r0','perf12s.eps');
+
+% % disp('ranksum 5, 8, 12');
+% % disp(ranksum(diff(perf5(perf5(:,3)==0,1:2),1,2),diff(perf5(perf5(:,3)==1,1:2),1,2)));
+% % disp(ranksum(diff(perf8(perf8(:,3)==0,1:2),1,2),diff(perf8(perf8(:,3)==1,1:2),1,2)));
+% % disp(ranksum(diff(perf12(perf12(:,3)==0,1:2),1,2),diff(perf12(perf12(:,3)==1,1:2),1,2)));
 % 
-% disp('ranksum 5, 8, 12');
-% disp(ranksum(diff(perf5(perf5(:,3)==0,1:2),1,2),diff(perf5(perf5(:,3)==1,1:2),1,2)));
-% disp(ranksum(diff(perf8(perf8(:,3)==0,1:2),1,2),diff(perf8(perf8(:,3)==1,1:2),1,2)));
-% disp(ranksum(diff(perf12(perf12(:,3)==0,1:2),1,2),diff(perf12(perf12(:,3)==1,1:2),1,2)));
+% % disp('adtest 5, 8, 12');
+% % [~,p]=adtest(diff(perf5(perf5(:,3)==1,1:2),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf5(:,3)==1),p);
+% % [~,p]=adtest(diff(perf8(perf8(:,3)==1,1:2),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf8(:,3)==1),p);
+% % [~,p]=adtest(diff(perf12(perf12(:,3)==1,1:2),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf12(:,3)==1),p);
 % 
-% disp('adtest 5, 8, 12');
-% [~,p]=adtest(diff(perf5(perf5(:,3)==1,1:2),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf5(:,3)==1),p);
-% [~,p]=adtest(diff(perf8(perf8(:,3)==1,1:2),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf8(:,3)==1),p);
-% [~,p]=adtest(diff(perf12(perf12(:,3)==1,1:2),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf12(:,3)==1),p);
-% 
-% disp('Mixed-between-within-ANOVA');
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf5(perf5(:,3)==0,1),perf5(perf5(:,3)==0,2),perf5(perf5(:,3)==1,1),perf5(perf5(:,3)==1,2)));
-% fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf8(perf8(:,3)==0,1),perf8(perf8(:,3)==0,2),perf8(perf8(:,3)==1,1),perf8(perf8(:,3)==1,2)));
-% fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf12(perf12(:,3)==0,1),perf12(perf12(:,3)==0,2),perf12(perf12(:,3)==1,1),perf12(perf12(:,3)==1,2)));
-% fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% 
-% 
-% 
+[efc5,efo5]=cohen_s_d(perf5(perf5(:,3)==0,1),perf5(perf5(:,3)==0,2),perf5(perf5(:,3)==1,1),perf5(perf5(:,3)==1,2));
+elifeFormatPrefix('DNMS task, 5s delay, correct rate',efc5,efo5);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf5(perf5(:,3)==0,1),perf5(perf5(:,3)==0,2),perf5(perf5(:,3)==1,1),perf5(perf5(:,3)==1,2)));
+elifeFormatPostfix();
+
+[efc8,efo8]=cohen_s_d(perf8(perf8(:,3)==0,1),perf8(perf8(:,3)==0,2),perf8(perf8(:,3)==1,1),perf8(perf8(:,3)==1,2));
+elifeFormatPrefix('DNMS task, 8s delay, correct rate',efc8,efo8);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf8(perf8(:,3)==0,1),perf8(perf8(:,3)==0,2),perf8(perf8(:,3)==1,1),perf8(perf8(:,3)==1,2)));
+elifeFormatPostfix();
+
+[efc12,efo12]=cohen_s_d(perf12(perf12(:,3)==0,1),perf12(perf12(:,3)==0,2),perf12(perf12(:,3)==1,1),perf12(perf12(:,3)==1,2));
+elifeFormatPrefix('DNMS task, 12s delay, correct rate',efc12,efo12);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf12(perf12(:,3)==0,1),perf12(perf12(:,3)==0,2),perf12(perf12(:,3)==1,1),perf12(perf12(:,3)==1,2)));
+elifeFormatPostfix();
+
 % return
+end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Fig.1 false miss lick dp 12s
 % 
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perf12(perf12(:,3)==0,4:5),'k');
-% plotOne([4,3]+1,perf12(perf12(:,3)==1,4:5),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,50]);
-% ylabel('Miss (%)','FontSize',10);
-% print('-depsc','-painters','-r0','miss12s.eps');
-% 
-% figure('Color','w','Position',[300,100,170,180]);
-% hold on;
-% plotOne([2,1],perf12(perf12(:,3)==0,6:7),'k');
-% plotOne([4,3]+1,perf12(perf12(:,3)==1,6:7),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,100]);
-% ylabel('False alarm (%)','FontSize',10);
-% print('-depsc','-painters','-r0','false12s.eps');
-% 
-% figure('Color','w','Position',[500,100,170,180]);
-% hold on;
-% plotOne([2,1],perf12(perf12(:,3)==0,9:10),'k');
-% plotOne([4,3]+1,perf12(perf12(:,3)==1,9:10),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([50,100]);
-% ylabel('Lick efficiency (%)','FontSize',10);
-% print('-depsc','-painters','-r0','lick12s.eps');
-% 
-% figure('Color','w','Position',[700,100,170,180]);
-% hold on;
-% plotOne([2,1],norminv((1-(perf12(perf12(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==0,6:7)./100*0.98+0.01),'k');
-% plotOne([4,3]+1,norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,5]);
-% ylabel('Sensitivity index (d'')','FontSize',10);
-% print('-depsc','-painters','-r0','dprime12s.eps');
-% 
-% 
-% disp('ranksum miss')
-% disp(ranksum(diff(perf12(perf12(:,3)==0,4:5),1,2),diff(perf12(perf12(:,3)==1,4:5),1,2)));
-% disp('ranksum false')
-% disp(ranksum(diff(perf12(perf12(:,3)==0,6:7),1,2),diff(perf12(perf12(:,3)==1,6:7),1,2)));
-% disp('ranksum lickEff')
-% disp(ranksum(diff(perf12(perf12(:,3)==0,9:10),1,2),diff(perf12(perf12(:,3)==1,9:10),1,2)));
-% disp('ranksum d''')
-% disp(ranksum(...
-% diff(norminv((1-(perf12(perf12(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==0,6:7)./100*0.98+0.01),1,2),...
-% diff(norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),1,2)));
-% 
-% 
-% 
-% disp('adtest 12, miss, false, lickEff, d''');
-% perf=perf12;[~,p]=swtest(diff(perf(perf(:,3)==1,4:5),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
-% [~,p]=adtest(diff(perf(perf(:,3)==1,6:7),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
-% [~,p]=adtest(diff(perf(perf(:,3)==1,9:10),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
-% [~,p]=adtest(...
-% diff(norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),1,2));
-% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
-% 
-% 
-% disp('Mixed-between-within-ANOVA');
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
-% fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
-% fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+if  (exist('plotParts','var') && ismember(2,plotParts)) || ~exist('plotParts','var')
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf12(perf12(:,3)==0,4:5),'k');
+plotOne([4,3]+1,perf12(perf12(:,3)==1,4:5),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,50]);
+ylabel('Miss (%)','FontSize',10);
+print('-depsc','-painters','-r0','miss12s.eps');
+
+figure('Color','w','Position',[300,100,170,180]);
+hold on;
+plotOne([2,1],perf12(perf12(:,3)==0,6:7),'k');
+plotOne([4,3]+1,perf12(perf12(:,3)==1,6:7),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,100]);
+ylabel('False alarm (%)','FontSize',10);
+print('-depsc','-painters','-r0','false12s.eps');
+
+figure('Color','w','Position',[500,100,170,180]);
+hold on;
+plotOne([2,1],perf12(perf12(:,3)==0,9:10),'k');
+plotOne([4,3]+1,perf12(perf12(:,3)==1,9:10),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([50,100]);
+ylabel('Lick efficiency (%)','FontSize',10);
+print('-depsc','-painters','-r0','lick12s.eps');
+
+figure('Color','w','Position',[700,100,170,180]);
+hold on;
+plotOne([2,1],norminv((1-(perf12(perf12(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==0,6:7)./100*0.98+0.01),'k');
+plotOne([4,3]+1,norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,5]);
+ylabel('Sensitivity index (d'')','FontSize',10);
+print('-depsc','-painters','-r0','dprime12s.eps');
+
+% % 
+% % disp('ranksum miss')
+% % disp(ranksum(diff(perf12(perf12(:,3)==0,4:5),1,2),diff(perf12(perf12(:,3)==1,4:5),1,2)));
+% % disp('ranksum false')
+% % disp(ranksum(diff(perf12(perf12(:,3)==0,6:7),1,2),diff(perf12(perf12(:,3)==1,6:7),1,2)));
+% % disp('ranksum lickEff')
+% % disp(ranksum(diff(perf12(perf12(:,3)==0,9:10),1,2),diff(perf12(perf12(:,3)==1,9:10),1,2)));
+% % disp('ranksum d''')
+% % disp(ranksum(...
+% % diff(norminv((1-(perf12(perf12(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% % diff(norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+
+% % 
+% % 
+% % disp('adtest 12, miss, false, lickEff, d''');
+% % perf=perf12;[~,p]=swtest(diff(perf(perf(:,3)==1,4:5),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
+% % [~,p]=adtest(diff(perf(perf(:,3)==1,6:7),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
+% % [~,p]=adtest(diff(perf(perf(:,3)==1,9:10),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
+% % [~,p]=adtest(...
+% % diff(norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),1,2));
+% % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
+
+perf=perf12;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5));
+elifeFormatPrefix('DNMS task, 12s delay, miss rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7));
+elifeFormatPrefix('DNMS task, 12s delay, false alarm rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10));
+elifeFormatPrefix('DNMS task, 12s delay, lick efficiency',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+elifeFormatPostfix();
+
+[efc,efo]=cohen_s_d((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)));
+
+elifeFormatPrefix('DNMS task, 12s delay, d prime',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01))));
+elifeFormatPostfix();
+
+
+
+% % disp('Mixed-between-within-ANOVA');
+% % [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+% % fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% % [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+% % fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
 % [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
 % fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
 % [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
@@ -146,10 +192,10 @@ addpath('D:\Behavior\reports\extern_lib');
 %     (norminv((1-(perf12(perf12(:,3)==1,4)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6)./100*0.98+0.01)),...
 %     (norminv((1-(perf12(perf12(:,3)==1,5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,7)./100*0.98+0.01))));
 % fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% 
-% 
-% return
 
+
+% return
+end
 
 
 % %%%%%%%%%%%%%%%%%%%
@@ -161,38 +207,39 @@ addpath('D:\Behavior\reports\extern_lib');
 % [~,perfBase]=stats_GLM(dnmsfiles.baseline);
 % [~,perfNoDelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
 % 
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perfBase(perfBase(:,3)==0,1:2),'k');
-% plotOne([5,4],perfBase(perfBase(:,3)==1,1:2),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([55,100]);
-% ylabel('Correct rate (%)','FontSize',10);
-% print('-depsc','-painters','-r0','perfBaseline.eps');
-% 
-% 
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perfGNG(perfGNG(:,3)==0,1:2),'k');
-% plotOne([5,4],perfGNG(perfGNG(:,3)==1,1:2),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([55,100]);
-% ylabel('Correct rate (%)','FontSize',10);
-% print('-depsc','-painters','-r0','perfGNG.eps');
-% 
-% 
-% 
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perfNoDelay(perfNoDelay(:,3)==0,1:2),'k');
-% plotOne([5,4],perfNoDelay(perfNoDelay(:,3)==1,1:2),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([55,100]);
-% ylabel('Correct rate (%)','FontSize',10);
-% print('-depsc','-painters','-r0','perfNoDelay.eps');
+if  (exist('plotParts','var') && ismember(3,plotParts)) || ~exist('plotParts','var')
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perfBase(perfBase(:,3)==0,1:2),'k');
+plotOne([5,4],perfBase(perfBase(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perfBaseline.eps');
+
+
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perfGNG(perfGNG(:,3)==0,1:2),'k');
+plotOne([5,4],perfGNG(perfGNG(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perfGNG.eps');
+
+
+
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perfNoDelay(perfNoDelay(:,3)==0,1:2),'k');
+plotOne([5,4],perfNoDelay(perfNoDelay(:,3)==1,1:2),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([55,100]);
+ylabel('Correct rate (%)','FontSize',10);
+print('-depsc','-painters','-r0','perfNoDelay.eps');
 % 
 % 
 % disp('ranksum baseline GNG noDelay');
@@ -212,6 +259,29 @@ addpath('D:\Behavior\reports\extern_lib');
 % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
 % 
 % 
+perf=perfBase;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2));
+elifeFormatPrefix('DNMS baseline control, correct rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+elifeFormatPostfix();
+
+
+perf=perfGNG;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2));
+elifeFormatPrefix('Go-Nogo control, correct rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+elifeFormatPostfix();
+
+
+perf=perfNoDelay;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2));
+elifeFormatPrefix('NMSWD control, correct rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+elifeFormatPostfix();
+
 % disp('Mixed-between-within-ANOVA');
 % perf=perfBase;[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
 % fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
@@ -223,6 +293,7 @@ addpath('D:\Behavior\reports\extern_lib');
 % 
 % 
 % return;
+end
 
 
 
@@ -230,231 +301,125 @@ addpath('D:\Behavior\reports\extern_lib');
 % %  F4  DPA block
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[~,perfDPABlock]=stats_GLM(ODPAfiles.DPA_delay_laser);
+% [~,perfDPABlock]=stats_GLM(ODPAfiles.DPA_delay_laser);
 
-% close all;
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,245,180]);
-% hold on;
-% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,1:2),'k');
-% plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,1:2),'b');
-% 
-% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% ylim([55,100]);
-% xlim([0,6]);
-% ylabel('Correct rate (%)');
-% ah=gca();
-% ah.YAxis.Color='k';
-% print('DPAperf.eps','-depsc','-r0');
-% 
+if  (exist('plotParts','var') && ismember(4,plotParts)) || ~exist('plotParts','var')
+set(groot,'DefaultLineLineWidth',1);
+figure('Color','w','Position',[100,100,245,180]);
+hold on;
+plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,1:2),'k');
+plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,1:2),'b');
+
+set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+ylim([55,100]);
+xlim([0,6]);
+ylabel('Correct rate (%)');
+ah=gca();
+ah.YAxis.Color='k';
+print('DPAperf.eps','-depsc','-r0');
+
 % disp('ranksum perf');
 % disp(ranksum(perfDPABlock(perfDPABlock(:,3)==0,2)-perfDPABlock(perfDPABlock(:,3)==0,1),perfDPABlock(perfDPABlock(:,3)==1,2)-perfDPABlock(perfDPABlock(:,3)==1,1)));
 % 
 % perf=perfDPABlock;[~,p]=adtest(diff(perf(perf(:,3)==1,1:2),1,2));
 % fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
-% 
+
 % perf=perfDPABlock;[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
 % fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% 
+
+perf=perfDPABlock;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2));
+elifeFormatPrefix('DPA task, correct rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+elifeFormatPostfix();
+
+end
+
 % return
 % 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % %  S7  DPA block Miss false lickEff d'
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% disp('ranksum miss')
-% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,4:5),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,4:5),1,2)));
-% disp('ranksum false')
-% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,6:7),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,6:7),1,2)));
-% disp('ranksum lickEff')
-% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,9:10),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,9:10),1,2)));
-% disp('ranksum d''')
-% disp(ranksum(...
-% diff(norminv((1-(perfDPABlock(perfDPABlock(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==0,6:7)./100*0.98+0.01),1,2),...
-% diff(norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),1,2)));
-% 
-% disp('Miss, FA, LickEff, d''');
-% 
-% 
-% figure('Color','w','Position',[100,100,160,180]);
-% hold on;
-% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,4:5),'k');
-% plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,4:5),'b');
-% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,50]);
-% ylabel('Miss');
-% print('-depsc','-painters','-r0','missDPA.eps');
-% 
-% figure('Color','w','Position',[300,100,160,180]);
-% hold on;
-% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,6:7),'k');
-% plotOne([5,4],perfDPABlock(perfDPABlock(:,3)==1,6:7),'b');
-% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,100]);
-% ylabel('False alarm');
-% print('-depsc','-painters','-r0','FA_DPA.eps');
-% 
-% 
-% figure('Color','w','Position',[500,100,160,180]);
-% hold on;
-% plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,9:10),'k');
-% plotOne([5,4],perfDPABlock(perfDPABlock(:,3)==1,9:10),'b');
-% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([50,100]);
-% ylabel('Lick efficiency');
-% print('-depsc','-painters','-r0','LickEffDPA.eps');
-% 
-% 
-% figure('Color','w','Position',[700,100,160,180]);
-% hold on;
-% plotOne([2,1],norminv((1-(perfDPABlock(perfDPABlock(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==0,6:7)./100*0.98+0.01),'k');
-% plotOne([5,4],norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),'b');
-% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,5]);
-% ylabel('Sensitivity index (d'')');
-% print('-depsc','-painters','-r0','DPrimeDPA.eps');
-% 
-% perf=perfDPABlock;
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
-% fprintf('Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
-% fprintf('FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
-% fprintf('LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
-% norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01),...
-% norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01),...
-% norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01),...
-% norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)...
-% ));
-% fprintf('DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% 
-% return
-
-
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% false miss lick dp 8s
+% %%% Fig S5 false miss lick dp 5s
 % 
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perf8(perf8(:,3)==0,4:5),'k');
-% plotOne([4,3]+1,perf8(perf8(:,3)==1,4:5),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,50]);
-% ylabel('Miss (%)','FontSize',10);
-% print('-depsc','-painters','-r0','miss8s.eps');
-% 
-% figure('Color','w','Position',[300,100,170,180]);
-% hold on;
-% plotOne([2,1],perf8(perf8(:,3)==0,6:7),'k');
-% plotOne([4,3]+1,perf8(perf8(:,3)==1,6:7),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,100]);
-% ylabel('False alarm (%)','FontSize',10);
-% print('-depsc','-painters','-r0','false8s.eps');
-% 
-% figure('Color','w','Position',[500,100,170,180]);
-% hold on;
-% plotOne([2,1],perf8(perf8(:,3)==0,9:10),'k');
-% plotOne([4,3]+1,perf8(perf8(:,3)==1,9:10),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([50,100]);
-% ylabel('Lick efficiency (%)','FontSize',10);
-% print('-depsc','-painters','-r0','lick8s.eps');
-% 
-% figure('Color','w','Position',[700,100,170,180]);
-% hold on;
-% plotOne([2,1],norminv((1-(perf8(perf8(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==0,6:7)./100*0.98+0.01),'k');
-% plotOne([4,3]+1,norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,5]);
-% ylabel('Sensitivity index (d'')','FontSize',10);
-% print('-depsc','-painters','-r0','dprime8s.eps');
-% 
-% 
-% disp('ranksum miss')
-% disp(ranksum(diff(perf8(perf8(:,3)==0,4:5),1,2),diff(perf8(perf8(:,3)==1,4:5),1,2)));
-% disp('ranksum false')
-% disp(ranksum(diff(perf8(perf8(:,3)==0,6:7),1,2),diff(perf8(perf8(:,3)==1,6:7),1,2)));
-% disp('ranksum lickEff')
-% disp(ranksum(diff(perf8(perf8(:,3)==0,9:10),1,2),diff(perf8(perf8(:,3)==1,9:10),1,2)));
-% disp('ranksum d''')
-% disp(ranksum(...
-% diff(norminv((1-(perf8(perf8(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==0,6:7)./100*0.98+0.01),1,2),...
-% diff(norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),1,2)));
-% 
-% 
-% perf=perf8;
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
-% fprintf('Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
-% fprintf('FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
-% fprintf('LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
-% norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01),...
-% norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01),...
-% norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01),...
-% norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)...
-% ));
-% fprintf('DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-% 
-% return
+
+if  (exist('plotParts','var') && ismember(5,plotParts)) || ~exist('plotParts','var')
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==0,4:5),'k');
+plotOne([4,3]+1,perf5(perf5(:,3)==1,4:5),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,50]);
+ylabel('Miss (%)','FontSize',10);
+print('-depsc','-painters','-r0','miss5s.eps');
+
+figure('Color','w','Position',[300,100,170,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==0,6:7),'k');
+plotOne([4,3]+1,perf5(perf5(:,3)==1,6:7),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,100]);
+ylabel('False alarm (%)','FontSize',10);
+print('-depsc','-painters','-r0','false5s.eps');
+
+figure('Color','w','Position',[500,100,170,180]);
+hold on;
+plotOne([2,1],perf5(perf5(:,3)==0,9:10),'k');
+plotOne([4,3]+1,perf5(perf5(:,3)==1,9:10),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([50,100]);
+ylabel('Lick efficiency (%)','FontSize',10);
+print('-depsc','-painters','-r0','lick5s.eps');
+
+figure('Color','w','Position',[700,100,170,180]);
+hold on;
+plotOne([2,1],norminv((1-(perf5(perf5(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==0,6:7)./100*0.98+0.01),'k');
+plotOne([4,3]+1,norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,5]);
+ylabel('Sensitivity index (d'')','FontSize',10);
+print('-depsc','-painters','-r0','dprime5s.eps');
+
+perf=perf5;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5));
+elifeFormatPrefix('DNMS task, 5s delay, miss rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+elifeFormatPostfix();
 
 
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7));
+elifeFormatPrefix('DNMS task, 5s delay, false alarm rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+elifeFormatPostfix();
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%% false miss lick dp 5s
-% 
-% figure('Color','w','Position',[100,100,170,180]);
-% hold on;
-% plotOne([2,1],perf5(perf5(:,3)==0,4:5),'k');
-% plotOne([4,3]+1,perf5(perf5(:,3)==1,4:5),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,50]);
-% ylabel('Miss (%)','FontSize',10);
-% print('-depsc','-painters','-r0','miss5s.eps');
-% 
-% figure('Color','w','Position',[300,100,170,180]);
-% hold on;
-% plotOne([2,1],perf5(perf5(:,3)==0,6:7),'k');
-% plotOne([4,3]+1,perf5(perf5(:,3)==1,6:7),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,100]);
-% ylabel('False alarm (%)','FontSize',10);
-% print('-depsc','-painters','-r0','false5s.eps');
-% 
-% figure('Color','w','Position',[500,100,170,180]);
-% hold on;
-% plotOne([2,1],perf5(perf5(:,3)==0,9:10),'k');
-% plotOne([4,3]+1,perf5(perf5(:,3)==1,9:10),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([50,100]);
-% ylabel('Lick efficiency (%)','FontSize',10);
-% print('-depsc','-painters','-r0','lick5s.eps');
-% 
-% figure('Color','w','Position',[700,100,170,180]);
-% hold on;
-% plotOne([2,1],norminv((1-(perf5(perf5(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==0,6:7)./100*0.98+0.01),'k');
-% plotOne([4,3]+1,norminv((1-(perf5(perf5(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf5(perf5(:,3)==1,6:7)./100*0.98+0.01),'b');
-% set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
-% xlim([0,6]);
-% ylim([0,5]);
-% ylabel('Sensitivity index (d'')','FontSize',10);
-% print('-depsc','-painters','-r0','dprime5s.eps');
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10));
+elifeFormatPrefix('DNMS task, 5s delay, lick efficiency',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+elifeFormatPostfix();
+
+[efc,efo]=cohen_s_d((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)));
+
+elifeFormatPrefix('DNMS task, 5s delay, d prime',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01))));
+elifeFormatPostfix();
+
+
 % 
 % 
 % disp('ranksum miss')
@@ -489,6 +454,246 @@ addpath('D:\Behavior\reports\extern_lib');
 % 
 % 
 % return
+
+end
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% Fig S5 false miss lick dp 8s
+% 
+if  (exist('plotParts','var') && ismember(5,plotParts)) || ~exist('plotParts','var')
+figure('Color','w','Position',[100,100,170,180]);
+hold on;
+plotOne([2,1],perf8(perf8(:,3)==0,4:5),'k');
+plotOne([4,3]+1,perf8(perf8(:,3)==1,4:5),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,50]);
+ylabel('Miss (%)','FontSize',10);
+print('-depsc','-painters','-r0','miss8s.eps');
+
+figure('Color','w','Position',[300,100,170,180]);
+hold on;
+plotOne([2,1],perf8(perf8(:,3)==0,6:7),'k');
+plotOne([4,3]+1,perf8(perf8(:,3)==1,6:7),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,100]);
+ylabel('False alarm (%)','FontSize',10);
+print('-depsc','-painters','-r0','false8s.eps');
+
+figure('Color','w','Position',[500,100,170,180]);
+hold on;
+plotOne([2,1],perf8(perf8(:,3)==0,9:10),'k');
+plotOne([4,3]+1,perf8(perf8(:,3)==1,9:10),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([50,100]);
+ylabel('Lick efficiency (%)','FontSize',10);
+print('-depsc','-painters','-r0','lick8s.eps');
+
+figure('Color','w','Position',[700,100,170,180]);
+hold on;
+plotOne([2,1],norminv((1-(perf8(perf8(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==0,6:7)./100*0.98+0.01),'k');
+plotOne([4,3]+1,norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),'b');
+set(gca,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,5]);
+ylabel('Sensitivity index (d'')','FontSize',10);
+print('-depsc','-painters','-r0','dprime8s.eps');
+
+
+perf=perf8;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5));
+elifeFormatPrefix('DNMS task, 8s delay, miss rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7));
+elifeFormatPrefix('DNMS task, 8s delay, false alarm rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10));
+elifeFormatPrefix('DNMS task, 8s delay, lick efficiency',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+elifeFormatPostfix();
+
+[efc,efo]=cohen_s_d((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)));
+
+elifeFormatPrefix('DNMS task, 8s delay, d prime',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01))));
+elifeFormatPostfix();
+
+
+% 
+% 
+% disp('ranksum miss')
+% disp(ranksum(diff(perf8(perf8(:,3)==0,4:5),1,2),diff(perf8(perf8(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perf8(perf8(:,3)==0,6:7),1,2),diff(perf8(perf8(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perf8(perf8(:,3)==0,9:10),1,2),diff(perf8(perf8(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perf8(perf8(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perf8(perf8(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf8(perf8(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+% 
+% 
+% perf=perf8;
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+% fprintf('Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+% fprintf('FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+% fprintf('LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
+% norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01),...
+% norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01),...
+% norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01),...
+% norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)...
+% ));
+% fprintf('DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% 
+% return
+
+end
+
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % %  S7  DPA block Miss false lickEff d'
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% disp('ranksum miss')
+% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,4:5),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,4:5),1,2)));
+% disp('ranksum false')
+% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,6:7),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,6:7),1,2)));
+% disp('ranksum lickEff')
+% disp(ranksum(diff(perfDPABlock(perfDPABlock(:,3)==0,9:10),1,2),diff(perfDPABlock(perfDPABlock(:,3)==1,9:10),1,2)));
+% disp('ranksum d''')
+% disp(ranksum(...
+% diff(norminv((1-(perfDPABlock(perfDPABlock(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==0,6:7)./100*0.98+0.01),1,2),...
+% diff(norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),1,2)));
+% 
+% disp('Miss, FA, LickEff, d''');
+% % 
+% 
+if  (exist('plotParts','var') && ismember(6,plotParts)) || ~exist('plotParts','var')
+
+figure('Color','w','Position',[100,100,160,180]);
+hold on;
+plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,4:5),'k');
+plotOne([4,3]+1,perfDPABlock(perfDPABlock(:,3)==1,4:5),'b');
+set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,50]);
+ylabel('Miss');
+print('-depsc','-painters','-r0','missDPA.eps');
+
+figure('Color','w','Position',[300,100,160,180]);
+hold on;
+plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,6:7),'k');
+plotOne([5,4],perfDPABlock(perfDPABlock(:,3)==1,6:7),'b');
+set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,100]);
+ylabel('False alarm');
+print('-depsc','-painters','-r0','FA_DPA.eps');
+
+
+figure('Color','w','Position',[500,100,160,180]);
+hold on;
+plotOne([2,1],perfDPABlock(perfDPABlock(:,3)==0,9:10),'k');
+plotOne([5,4],perfDPABlock(perfDPABlock(:,3)==1,9:10),'b');
+set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([50,100]);
+ylabel('Lick efficiency');
+print('-depsc','-painters','-r0','LickEffDPA.eps');
+
+
+figure('Color','w','Position',[700,100,160,180]);
+hold on;
+plotOne([2,1],norminv((1-(perfDPABlock(perfDPABlock(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==0,6:7)./100*0.98+0.01),'k');
+plotOne([5,4],norminv((1-(perfDPABlock(perfDPABlock(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPABlock(perfDPABlock(:,3)==1,6:7)./100*0.98+0.01),'b');
+set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
+xlim([0,6]);
+ylim([0,5]);
+ylabel('Sensitivity index (d'')');
+print('-depsc','-painters','-r0','DPrimeDPA.eps');
+
+
+perf=perfDPABlock;
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5));
+elifeFormatPrefix('DPA task, miss rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7));
+elifeFormatPrefix('DPA task, false alarm rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10));
+elifeFormatPrefix('DPA task, lick efficiency',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+elifeFormatPostfix();
+
+[efc,efo]=cohen_s_d((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)));
+
+elifeFormatPrefix('DPA task, d prime',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange((norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01)),...
+    (norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01))));
+elifeFormatPostfix();
+
+
+% 
+% perf=perfDPABlock;
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+% fprintf('Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+% fprintf('FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+% fprintf('LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
+% norminv((1-(perf(perf(:,3)==0,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,6)./100*0.98+0.01),...
+% norminv((1-(perf(perf(:,3)==0,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==0,7)./100*0.98+0.01),...
+% norminv((1-(perf(perf(:,3)==1,4)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,6)./100*0.98+0.01),...
+% norminv((1-(perf(perf(:,3)==1,5)./100))*0.98+0.01)-norminv(perf(perf(:,3)==1,7)./100*0.98+0.01)...
+% ));
+% fprintf('DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% 
+% return
+% 
+
+end
+
 
 
 
@@ -541,122 +746,6 @@ addpath('D:\Behavior\reports\extern_lib');
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 12s false miss %
-%%%%%%%%%%%%%%%%%%
-
-% close all;
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,150,180]);
-% hold on;
-% % yyaxis left;
-% % plotOne([2,1],perf5(perf5(:,3)==0,1:2),'k');
-% % plotOne([4,3]+1,perf5(perf5(:,3)==1,1:2),'b');
-% % plotOne([6,5]+2,perf8(perf8(:,3)==1,1:2),'b');
-% plotOne([2,1],perf12(perf12(:,3)==1,4:5),'b');
-% plotOne([4,3]+1,perf12(perf12(:,3)==1,6:7),'b');
-% set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% set(gca,'YColor','k');
-% xlim([0,6]);
-% % yyaxis right;
-% figure('Color','w','Position',[500,100,40,180]);
-% hold on;
-% plotOne([2,1]+1,norminv((1-(perf12(perf12(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perf12(perf12(:,3)==1,6:7)./100*0.98+0.01),'b');
-% set(gca,'XTick',[2,3],'XTickLabel',{'off','on'});
-% set(gca,'YColor','k');
-% % plotOne([10,9]+4,perfBase(perfBase(:,3)==1,1:2),'b');
-% 
-% xlim([1,4]);
-% % ylim([0,70]);
-% 
-% [~,p12m]=ttest(perf12(perf12(:,3)==1,4),perf12(perf12(:,3)==1,5));
-% [~,p12f]=ttest(perf12(perf12(:,3)==1,6),perf12(perf12(:,3)==1,7));
-% 
-% 
-% 
-% 
-% figure('Color','w','Position',[1400,100,40,180]);
-% hold on;
-% plotOne([2,1]+1,perf12(perf12(:,3)==1,9:10),'b');
-% xlim([1,4]);
-% ylim([55,100]);
-% set(gca,'XTick',[2,3],'XTickLabel',{'off','on'});
-% return;
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 12S miss false early late %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% allTrials=allTrials5;
-% mice=unique(allTrials(:,7));
-% isIncorrect=@(x) x(:,4)==0;
-% isMatch=@(x) (x(:,1)==x(:,2));
-% stats=[];
-% earlyThres=50;
-% lateThres=200;
-% for mouse=1:size(mice,1)
-%     trials=allTrials(allTrials(:,7)==mice(mouse),:);
-%     if trials(1,8)==0
-%         continue;
-%     end
-%     falseOffEarly=nnz(isIncorrect(trials) & isMatch(trials) & trials(:,3)==0 & trials(:,6)<=earlyThres)*100/nnz(isMatch(trials) & trials(:,3)==0 & trials(:,6)<=earlyThres);
-%     falseOffLate=nnz(isIncorrect(trials) & isMatch(trials) & trials(:,3)==0 & trials(:,6)>lateThres)*100/nnz(isMatch(trials) & trials(:,3)==0 & trials(:,6)>lateThres);
-%     
-%     falseOnEarly=nnz(isIncorrect(trials) & isMatch(trials) & trials(:,3)==1 & trials(:,6)<=earlyThres)*100/nnz(isMatch(trials) & trials(:,3)==1 & trials(:,6)<=earlyThres);
-%     falseOnLate=nnz(isIncorrect(trials) & isMatch(trials) & trials(:,3)==1 & trials(:,6)>lateThres)*100/nnz(isMatch(trials) & trials(:,3)==1 & trials(:,6)>lateThres);
-% 
-% 
-%     missOffEarly=nnz(isIncorrect(trials) & (~isMatch(trials)) & trials(:,3)==0 & trials(:,6)<=earlyThres)*100/nnz((~isMatch(trials)) & trials(:,3)==0 & trials(:,6)<=earlyThres);
-%     missOffLate=nnz(isIncorrect(trials) & (~isMatch(trials)) & trials(:,3)==0 & trials(:,6)>lateThres)*100/nnz((~isMatch(trials)) & trials(:,3)==0 & trials(:,6)>lateThres);
-%     
-%     missOnEarly=nnz(isIncorrect(trials) & (~isMatch(trials)) & trials(:,3)==1 & trials(:,6)<=earlyThres)*100/nnz((~isMatch(trials)) & trials(:,3)==1 & trials(:,6)<=earlyThres);
-%     missOnLate=nnz(isIncorrect(trials) & (~isMatch(trials)) & trials(:,3)==1 & trials(:,6)>lateThres)*100/nnz((~isMatch(trials)) & trials(:,3)==1 & trials(:,6)>lateThres);
-%     stats=[stats;missOnEarly, missOffEarly, missOnLate, missOffLate, falseOnEarly, falseOffEarly, falseOnLate, falseOffLate];
-% end
-%     
-% 
-% close all;
-% set(groot,'DefaultLineLineWidth',1);
-% figure('Color','w','Position',[100,100,450,180]);
-% hold on;
-% 
-% plotOne([2,1]+1,stats(:,1:2),'b');
-% plotOne([4,3]+2,stats(:,3:4),'b');
-% 
-% plotOne([6,5]+3,stats(:,5:6),'b');
-% plotOne([8,7]+4,stats(:,7:8),'b');
-% 
-% 
-% % set(gca,'XTick',[1,2,4,5],'XTickLabel',{'off','on','off','on'});
-% % xlim([1,7]);
-% % ylim([55,100]);
-% 
-% 
-% return;
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% plot([12,12],ylim(),':k','LineWidth',1);
-
-% set(gca,'YTick',60:20:100,'XTick',[1 2 4 5 7 8 10 11 13 14],'XTickLabel',[]);
-% savefig('OptoSupress.fig');
-% 
-% [~,p5n]=ttest(perf5(perf5(:,3)==0,1),perf5(perf5(:,3)==0,2));
-% [~,p5]=ttest(perf5(perf5(:,3)==1,1),perf5(perf5(:,3)==1,2));
-% [~,p8]=ttest(perf8(perf8(:,3)==1,1),perf8(perf8(:,3)==1,2));
-% [~,p12]=ttest(perf12(perf12(:,3)==1,1),perf12(perf12(:,3)==1,2));
-% 
-% 
-% [~,pbase]=ttest(perfBase(perfBase(:,3)==1,1),perfBase(perfBase(:,3)==1,2));
-% [~,pGNG]=ttest(perfGNG(perfGNG(:,3)==1,1),perfGNG(perfGNG(:,3)==1,2));
 
 
 
@@ -667,8 +756,8 @@ plot((x+randd(y))',y',sprintf('-%s.',pColor));
 
 ci=bootci(1000,@(x) nanmean(x), y(:,2));
 plot([x(2)-dd,x(2)-dd],ci,sprintf('-%s',pColor),'LineWidth',1);
-[~,p]=ttest(y(:,1),y(:,2));
-disp(p);
+% [~,p]=ttest(y(:,1),y(:,2));
+% disp(p);
 % disp(ci)
 ci=bootci(1000,@(x) nanmean(x), y(:,1));
 plot([x(1)+dd,x(1)+dd],ci,sprintf('-%s',pColor),'LineWidth',1);
@@ -737,6 +826,16 @@ end
 % 
 % 
 % 
+function [effCtrl,effOpto]=cohen_s_d(ctrlOff,ctrlOn,optoOff,optoOn)
+nCtrl=numel(ctrlOff)-1;
+sCtrl=sqrt((nCtrl*var(ctrlOff)+nCtrl*var(ctrlOn))/(2*nCtrl));
+nOpto=numel(optoOff)-1;
+sOpto=sqrt((nOpto*var(optoOff)+nOpto*var(optoOn))/(2*nOpto));
+effCtrl=(mean(ctrlOff)-mean(ctrlOn))/sCtrl;
+effOpto=(mean(optoOff)-mean(optoOn))/sOpto;
+end
+
+
 
 function p=permTest()
 dperf=[perfDPABlock(:,2)-perfDPABlock(:,1),perfDPABlock(:,3)];
@@ -766,4 +865,15 @@ out=[out;
     optoOff,repmat([2,1],length(optoOff),1),(1:length(optoOff))'+length(ctrlOff)];
 out=[out;
     optoOn,repmat([2,2],length(optoOff),1),(1:length(optoOff))'+length(ctrlOff)];
+end
+
+function elifeFormatMid()
+fprintf('<tr><td>Mixed-between-within-ANOVA</td><td colspan=3><pre>');
+end
+function elifeFormatPostfix()
+fprintf('</pre></td></tr></table>\n');
+end
+function elifeFormatPrefix(s1,efc,efo)
+fprintf('<br/><table><tr><th colspan=4>%s</th></tr>\n',s1);
+fprintf('<tr><td width="25%%">Effect size (Cohen''s d), control</td><td width="25%%">%.3f</td><td width="25%%">Effect size (Cohen''s d), ChR2</td><td width="25%%">%.3f</td></tr>\n',efc,efo);
 end

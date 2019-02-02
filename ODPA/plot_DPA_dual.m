@@ -23,22 +23,34 @@ ylim([55,100]);
 % set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',[]);
 
 
-
-perf=perfDPA;
 set(gca,'YTick',60:20:100,'XTick',[1 2 4 5],'XTickLabel',{'off','on','off','on'});
 savefig([outfile1,'.fig']);
 print(sprintf('%s_distr.eps',outfile1),'-depsc','-r0');
 
 
-
-disp('ranksum perf');
-disp(ranksum(perfDPA(perfDPA(:,3)==0,2)-perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==1,2)-perfDPA(perfDPA(:,3)==1,1)));
-
-[~,p]=adtest(diff(perf(perf(:,3)==1,1:2),1,2));
-fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
-
+perf=perfDPA;
+% disp('ranksum perf');
+% disp(ranksum(perfDPA(perfDPA(:,3)==0,2)-perfDPA(perfDPA(:,3)==0,1),perfDPA(perfDPA(:,3)==1,2)-perfDPA(perfDPA(:,3)==1,1)));
+% 
+% [~,p]=adtest(diff(perf(perf(:,3)==1,1:2),1,2));
+% fprintf('Anderson–Darling test\tn = %d\tp = %.4f\n',sum(perf(:,3)==1),p);
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2));
+elifeFormatPrefix('Dual task, DPA correct rate',efc,efo);
+elifeFormatMid();
 [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
-fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7));
+elifeFormatPrefix('Dual task, DPA false alarm rate',efc,efo);
+elifeFormatMid();
+[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+elifeFormatPostfix();
+
+
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,1),perf(perf(:,3)==0,2),perf(perf(:,3)==1,1),perf(perf(:,3)==1,2)));
+% fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
 % return
 
 
@@ -53,20 +65,52 @@ fprintf('Mixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= 
 % diff(norminv((1-(perfDPA(perfDPA(:,3)==0,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6:7)./100*0.98+0.01),1,2),...
 % diff(norminv((1-(perfDPA(perfDPA(:,3)==1,4:5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6:7)./100*0.98+0.01),1,2)));
 % 
-   
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5));
+elifeFormatPrefix('Dual task, DPA miss rate',efc,efo);
+elifeFormatMid();
 [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
-fprintf('Dual Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
-[~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
-fprintf('Dual FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10));
+elifeFormatPrefix('Dual task, DPA lick efficiency',efc,efo);
+elifeFormatMid();
 [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
-fprintf('Dual LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+elifeFormatPostfix();
+
+
+[efc,efo]=cohen_s_d(...
+norminv((1-(perfDPA(perfDPA(:,3)==0,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6)./100*0.98+0.01),...
+norminv((1-(perfDPA(perfDPA(:,3)==0,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,7)./100*0.98+0.01),...
+norminv((1-(perfDPA(perfDPA(:,3)==1,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6)./100*0.98+0.01),...
+norminv((1-(perfDPA(perfDPA(:,3)==1,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,7)./100*0.98+0.01)...
+);
+elifeFormatPrefix('Dual task, DPA d prime',efc,efo);
+elifeFormatMid();
 [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
 norminv((1-(perfDPA(perfDPA(:,3)==0,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6)./100*0.98+0.01),...
 norminv((1-(perfDPA(perfDPA(:,3)==0,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,7)./100*0.98+0.01),...
 norminv((1-(perfDPA(perfDPA(:,3)==1,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6)./100*0.98+0.01),...
 norminv((1-(perfDPA(perfDPA(:,3)==1,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,7)./100*0.98+0.01)...
 ));
-fprintf('Dual DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+elifeFormatPostfix();
+
+
+
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,4),perf(perf(:,3)==0,5),perf(perf(:,3)==1,4),perf(perf(:,3)==1,5)));
+% fprintf('Dual Miss\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,6),perf(perf(:,3)==0,7),perf(perf(:,3)==1,6),perf(perf(:,3)==1,7)));
+% fprintf('Dual FA\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(perf(perf(:,3)==0,9),perf(perf(:,3)==0,10),perf(perf(:,3)==1,9),perf(perf(:,3)==1,10)));
+% fprintf('Dual LE\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
+% [~,~,~,~,p]=mixed_between_within_anova(rearrange(...
+% norminv((1-(perfDPA(perfDPA(:,3)==0,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,6)./100*0.98+0.01),...
+% norminv((1-(perfDPA(perfDPA(:,3)==0,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==0,7)./100*0.98+0.01),...
+% norminv((1-(perfDPA(perfDPA(:,3)==1,4)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,6)./100*0.98+0.01),...
+% norminv((1-(perfDPA(perfDPA(:,3)==1,5)./100))*0.98+0.01)-norminv(perfDPA(perfDPA(:,3)==1,7)./100*0.98+0.01)...
+% ));
+% fprintf('Dual DP\tMixed-between-within-ANOVA, within CRZ between interaction\tdf = 1\tp= %.4f\n',p{4});
 
 
 if exist('outfile2','var')  && ~isempty(outfile2)
@@ -311,3 +355,27 @@ out=[out;
 out=[out;
     optoOn,repmat([2,2],length(optoOff),1),(1:length(optoOff))'+length(ctrlOff)];
 end
+
+
+
+function elifeFormatMid()
+fprintf('<tr><td>Mixed-between-within-ANOVA</td><td colspan=3><pre>');
+end
+function elifeFormatPostfix()
+fprintf('</pre></td></tr></table>\n');
+end
+function elifeFormatPrefix(s1,efc,efo)
+fprintf('<br/><table><tr><th colspan=4>%s</th></tr>\n',s1);
+fprintf('<tr><td width="25%%">Effect size (Cohen''s d), control</td><td width="25%%">%.3f</td><td width="25%%">Effect size (Cohen''s d), ChR2</td><td width="25%%">%.3f</td></tr>\n',efc,efo);
+end
+
+
+function [effCtrl,effOpto]=cohen_s_d(ctrlOff,ctrlOn,optoOff,optoOn)
+nCtrl=numel(ctrlOff)-1;
+sCtrl=sqrt((nCtrl*var(ctrlOff)+nCtrl*var(ctrlOn))/(2*nCtrl));
+nOpto=numel(optoOff)-1;
+sOpto=sqrt((nOpto*var(optoOff)+nOpto*var(optoOn))/(2*nOpto));
+effCtrl=(mean(ctrlOff)-mean(ctrlOn))/sCtrl;
+effOpto=(mean(optoOff)-mean(optoOn))/sOpto;
+end
+

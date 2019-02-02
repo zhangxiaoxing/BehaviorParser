@@ -45,7 +45,12 @@ for mice=1:length(ids)
     f=getMiceFile(ids{mice});
     if size(f,1)>0
         for fidx=1:size(f,1)
-            z.processFile(f(fidx,:));
+            if ~exist(f(fidx,:),'file')
+                fn=replace(f(fidx,:),'.\behavior\','D:\behavior\');
+            else
+                fn=f(fidx,:);
+            end
+            z.processFile(fn);
             facSeq=z.getFactorSeq(false);
             if exist('suppressLaser','var') &&(~isempty(suppressLaser)) && suppressLaser
                 facSeq(:,3)=0;
@@ -83,7 +88,7 @@ for mice=1:length(ids)
             facSeq(:,6)=([0;facSeq(1:end-1,4)]);%prev correct
             facSeq(:,7)=([0;facSeq(1:end-1,5)]);%prev lick
 
-            facSeq(:,8)=ismember(ids{mice},optoPos);
+            facSeq(:,8)=ismember(lower(ids{mice}),lower(optoPos));
             
             
             
@@ -107,7 +112,7 @@ for mice=1:length(ids)
         lickEffOn=sum(oneMice(~matchOdor(oneMice(:,1),oneMice(:,2)) & oneMice(:,3) ,15))*100/sum(oneMice(oneMice(:,3)==1,15));
         lickEffOff=sum(oneMice(~matchOdor(oneMice(:,1),oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
         
-        perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
+        perMice=[perMice;perfOn,perfOff,ismember(lower(ids{mice}),lower(optoPos)),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
         
     end
 end
