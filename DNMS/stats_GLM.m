@@ -154,8 +154,6 @@ end
 
 function out=clearBadPerf(facSeq)
 
- 
-    
     if length(facSeq)>=80
         facSeq(:,5)=0;
         i=80;

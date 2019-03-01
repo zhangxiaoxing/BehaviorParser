@@ -12,13 +12,13 @@ if size(fn,1)>1
 end
 javaaddpath('I:\java\zmat\build\classes\');
 z=zmat.Zmat;
-z.setFullSession(12);
+z.setFullSession(0);
 
 z.processFile(fn);
-factors=z.getFactorSeq(false);
+factors=z.getFactorSeq(false,false);
 % l=z.getTrialLick(0);
 % violated=false(size(l));
-factors(factors(:,4)==3 & factors(:,5)<3,4)=4;
+factors(factors(:,4)==3 & factors(:,5)<2,4)=4;
 len=size(factors,1);
 perf=zeros(len-39,1);
 if size(factors,1)>40
@@ -37,13 +37,15 @@ set(gca,'YTick',[])
 if contains(fn,'Test','IgnoreCase',true) && contains(fn,'Shaping','IgnoreCase',true)
     suffix=' Error in task';
 elseif contains(fn,'Test','IgnoreCase',true)
-    suffix=' Test';
+    suffix=regexp(fn,'TEST_{0,1}\d{0,2}[sS]{0,1}','match','once');
+elseif contains(fn,'Opto','IgnoreCase',true)
+    suffix=regexpi(fn,'OPTO_{0,1}\d{0,2}[sS]{0,1}','match','once');
 elseif contains(fn,'Shaping','IgnoreCase',true)
     suffix=' Shaping';
 else
     suffix=' Unknown task';
 end
-title(sprintf('%s%s,%.1fs t-t',mid,suffix,mean(diff(factors(:,6)))/1000));
+title(sprintf('%s %s',mid,suffix),'Interpreter','none');
 end
 
 function useless

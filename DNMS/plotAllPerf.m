@@ -804,11 +804,13 @@ perf8t(:,2)=decay(8);
 perf12t=perf12(:,[3 3 1 2]);
 perf12t(:,2)=decay(12);
 
+
 t=[perf5t;perf8t;perf12t];
 perfT=table(t(:,1),t(:,2),t(:,3),t(:,4),'VariableNames',{'Gene','Delay','Laser_Off','Laser_On'});
 laser=table({'Off';'On'},'VariableNames',{'Laser'});
 RptMdl=fitrm(perfT,'Laser_Off,Laser_On~Gene*Delay','WithinDesign',laser);
-[ranovatbl,A,C,D]=ranova(RptMdl,'WithinModel','Laser')
+[ranovatbl,A,C,D]=ranova(RptMdl,'WithinModel','Laser');
+
 
 
 tdiff=[t(:,1:2),t(:,4)-t(:,3)];
