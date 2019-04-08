@@ -18,7 +18,7 @@ ylim([55,100]);
 ylabel('Correct Rate (%)','FontSize',10);
 print('-depsc','-painters','-r0','perf5s.eps');
 
-set(groot,'DefaultLineLineWidth',1);
+
 figure('Color','w','Position',[100,100,170,180]);
 hold on;
 plotOne([2,1],perf8(perf8(:,3)==0,1:2),'k');

@@ -1,6 +1,6 @@
 classdef Tools < handle
     properties (Constant)
-        thres=10;
+        thres=15;
     end
     
     methods (Static)
@@ -100,7 +100,7 @@ classdef Tools < handle
             end
         end
        
-        function out=clearBadPerf(facSeq)
+        function out=clearBadPerfAlt2(facSeq)
             
             if length(facSeq)>=80
                 facSeq(:,5)=0;
@@ -124,36 +124,24 @@ classdef Tools < handle
             end
         end
         
-        function [out,larger]=permTest(A,B)
-            rawDiff=mean(A(:))-mean(B(:));
-            currDelta=abs(rawDiff);
-            permed=nan(1,1000);
-            for i=1:1000
-                [AA,BB]=Tools.permSample(A,B);
-                permed(i)=abs(mean(AA)-mean(BB));
-            end
-            out=mean(permed>=currDelta);
-            if rawDiff>0
-                larger=1;
+        function [out, wellTrained]=clearBadPerfAlt(facSeq,thres)
+            wellTrained=false;
+            if length(facSeq)>=40
+                wtTrials=false(size(facSeq,1),1);
+                i=40;
+                while i<length(facSeq)
+                    good=nnz(ismember(facSeq(i-39:i,4),[3 6]));
+                    if good>=40*thres/100
+                            wtTrials(i-39:i,1)=true;
+                            wellTrained=true;
+                    end
+                    i=i+1;
+                end
+                out=facSeq(wtTrials,:);
             else
-                larger=2;
+                out=[];
             end
         end
         
-        function [newA,newB]=permSample(A,B)
-            pool=[A(:);B(:)];
-            pool=pool(randperm(length(pool)));
-            newA=pool(1:numel(A));
-            newB=pool((numel(A)+1):end);
-        end
-        
-        function p=pairedPermTest(A,B)
-            currDelta=abs(mean(A(:)-B(:)));
-            permed=nan(1,1000);
-            for i=1:1000
-                permed(i)=abs(((rand(1,numel(A))>0.5).*2-1)*(A(:)-B(:)))./numel(A);
-            end
-            p=mean(permed>=currDelta);
-        end
     end
 end

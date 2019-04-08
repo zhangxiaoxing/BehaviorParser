@@ -3,13 +3,13 @@ z=zmat.ZmatGNG;
 GNGFaqSeq=cell(0,1);
 for i=1:length(GNGNoLaser)
     z.processFile(GNGNoLaser{i});
-    GNGFaqSeq{end+1}=z.getFactorSeq(false);
+    GNGFaqSeq{end+1}=z.getFactorSeq(false,false);
 end
 z=zmat.Zmat;
 MSWODFaqSeq=cell(0,1);
 for i=1:length(NoDelayNoLaser)
     z.processFile(NoDelayNoLaser{i});
-    MSWODFaqSeq{end+1}=z.getFactorSeq(false);
+    MSWODFaqSeq{end+1}=z.getFactorSeq(false,false);
 end
 
 

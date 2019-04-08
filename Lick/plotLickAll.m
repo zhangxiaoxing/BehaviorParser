@@ -1,15 +1,20 @@
-function miceAverage=plotLickAll(fs,delayLen)
+function miceAverage=plotLickAll(fs,delayLen,trialPerSess)
 binW=200;
 lickBin=-(delayLen+2)*1000:binW:3500;
-addpath d:\Behavior\reports\Z;
+
 ids=unique(regexp(fs,'(?<=\\)\w?\d{1,4}(?=_)','match','once'));
 %DBG
-optoPos={'33', '38', '41', '101', '102', '106', '107', '66', '67', '76', '78', '80', '81', '83','V14','V15','V7','V9','V1','V49','V50','V58','V59','V62','S1','S5','S6','S12','S16','S24','S32','S31','S33','S34'};
-
+optoPos={'33', '38', '41', '101', '102', '106', '107', '66', '67', '76', '78', '80', '81', '83','V14','V15','V7','V9','V1','V49','V50','V58','V59','V62','S1','S5','S6','S12','S16','S24','S32','S31','S33','S34','9773','9785','362','368','370','371','372','511','516','536'};
+% ids=ids(ismember(lower(ids),lower(optoPos)));%only use ChR2 mice
 ids=ids(ismember(lower(ids),lower(optoPos)));%only use ChR2 mice
+
 
 javaaddpath('I:\java\zmat\build\classes\')
 z=zmat.Zmat;
+if exist('trialPerSess','var')
+    z.setFullSession(trialPerSess);
+    z.setMinLick(round(trialPerSess*0.35));
+end
 % z.setFullSession(20);
 % z.setMinLick(5);
 % z.setDebugLevel(100);
@@ -28,7 +33,8 @@ for midx=1:length(ids)
     crNone=zeros(size(miceF,1),length(lickBin)-1);
     
     for fidx=1:size(miceF,1)
-        z.processFile(miceF(fidx,:));
+%         z.processFile(replace(miceF(fidx,:),'.\behavior\','D:\Behavior\'));
+        z.processFile(replace(miceF(fidx,:),'.\behavior\','D:\Behavior\'));
         lickOne=z.getTrialLick(100);
         if ~isempty(lickOne)
 %DBG        
@@ -41,8 +47,8 @@ for midx=1:length(ids)
              crLaser(fidx,:)=histcounts(lickOne(lickOne(:,3)==3 & lickOne(:,4)==1,2),lickBin)./length(unique(lickOne(lickOne(:,3)==3 & lickOne(:,4)==1,1))).*(1000/binW);
              crNone(fidx,:)=histcounts(lickOne(lickOne(:,3)==3 & lickOne(:,4)==0,2),lickBin)./length(unique(lickOne(lickOne(:,3)==3 & lickOne(:,4)==0,1))).*(1000/binW);
         else
-            disp('Empty Lick');
-            pause();
+            fprintf('Empty Lick mid %d, fidx %d\n',midx,fidx);
+%             pause();
         end
     end
     
@@ -55,7 +61,7 @@ end
 
 plotOne(miceAverage.hitLaser,miceAverage.hitNone,'hit');
 print('-depsc',sprintf('Lick_LaserOnOff_D%d.eps',delayLen),'-painters');
-% plotOne(miceAverage.crLaser,miceAverage.crNone,'cr');
+plotOne(miceAverage.crLaser,miceAverage.crNone,'cr');
 
 
 
@@ -87,26 +93,29 @@ print('-depsc',sprintf('Lick_LaserOnOff_D%d.eps',delayLen),'-painters');
         ylabel('Lick (Hz)','FontSize',10);
         
         text(delayLen.*(1000/binW),5,sprintf('n = %d',size(laserOn,1)),'FontSize',10);
-        winW=1000/binW;
+%         winW=1000/binW;
         
 
         savefig(fh,sprintf('%ds_%s_lick.fig',delayLen,fname));
         set(fh,'PaperPositionMode','auto');
 %         print(fh,sprintf('%ds_%s_lick.eps',delayLen,fname),'-depsc','-cmyk');
 %DBG        
-        for pidx=1:winW:(length(lickBin)-winW-1)
-            [p,larger]=permTest(laserOn(:,(pidx:pidx+winW-1)),laserOff(:,(pidx:pidx+winW-1)));
-            colors={'b','k'};
-            if p<0.05
-                text(pidx+(winW/2+0.5),3.25,p2Str(p),'HorizontalAlignment','center','FontSize',10,'Color',colors{larger});
-                text(pidx+(winW/2+0.5),3.75,sprintf('%.3f',p),'HorizontalAlignment','center','FontSize',10,'Color',colors{larger});
-                fprintf('Significant %d\n',pidx);
-             else
-                 text(pidx+(winW/2+0.5),3.25,'N.S.','HorizontalAlignment','center','FontSize',10);
-            end
-        end
+%         for pidx=1:winW:(length(lickBin)-winW-1)
+%             [p,larger]=permTest(laserOn(:,(pidx:pidx+winW-1)),laserOff(:,(pidx:pidx+winW-1)));
+%             colors={'b','k'};
+%             p=p*(delayLen+5);
+%             if p<0.05
+%                 text(pidx+(winW/2+0.5),3.25,p2Str(p),'HorizontalAlignment','center','FontSize',10,'Color',colors{larger});
+%                 text(pidx+(winW/2+0.5),3.75,sprintf('%.3f',p),'HorizontalAlignment','center','FontSize',10,'Color',colors{larger});
+%                 fprintf('Significant %d\n',pidx);
+%              else
+%                  text(pidx+(winW/2+0.5),3.25,'N.S.','HorizontalAlignment','center','FontSize',10);
+%             end
+%         end
 %         xlim([delayLen.*(1000/binW),(delayLen+5).*(1000/binW)]+0.5);
-        
+        p=ranovaLick(laserOff(:,15:end),laserOn(:,15:end));
+        text(diff(xlim())*0.15,diff(ylim())*0.5,sprintf('p = %.4f',p(1)));
+        text(diff(xlim())*0.3,diff(ylim())*0.5,sprintf('p = %.4f',p(2)));
         ylim([0,9]);
         
     end
@@ -120,8 +129,8 @@ end
 function [out,larger]=permTest(A,B)
     rawDiff=mean(A(:))-mean(B(:));
     currDelta=abs(rawDiff);
-    permed=nan(1,1000);
-    for i=1:1000
+    permed=nan(1,10000);
+    for i=1:10000
         [AA,BB]=permSample(A,B);
         permed(i)=abs(mean(AA)-mean(BB));
     end
@@ -139,3 +148,36 @@ pool=pool(randperm(length(pool)));
 newA=pool(1:numel(A));
 newB=pool((numel(A)+1):end);
 end
+
+
+function VLFiles()
+javaaddpath('I:\java\zmat\build\classes\');
+z=zmat.Zmat;
+z.updateFilesList({'D:\Behavior2019\Feb\'});
+fsVL12=cell(z.listFiles({'opto','12s'}));
+fsVL20=cell(z.listFiles({'opto','20s'}));
+end
+
+
+function str=p2Str(p)
+if p<0.001
+    str='***';
+elseif p<0.01
+    str='**';
+elseif p<0.05
+    str='*';
+else
+    str='n.s.';
+end
+end
+
+
+function p=ranovaLick(laserOff,laserOn)
+tbl=array2table([laserOff,laserOn]);
+optoCondArr=[zeros(size(laserOff,2),1);ones(size(laserOff,2),1)];
+optoCond=table(num2str(optoCondArr),[1:size(laserOff,2),1:size(laserOff,2)].','VariableNames',{'laser','time'});
+RAMDL=fitrm(tbl,sprintf('Var1-Var%d~1',size(laserOn,2)*2),'WithinDesign',optoCond);
+[ranovatbl,A,C,D]=ranova(RAMDL,'WithinModel','laser*time');
+p=ranovatbl.pValue([3,7]);
+end
+

@@ -1,4 +1,4 @@
-function [allTrial,perMice]=stats_GLM(files,suppressLaser,isGNG)
+function [allTrial,perMice,idOut]=stats_GLM(files,suppressLaser,isGNG)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -39,6 +39,7 @@ minLick=0;
 z.setMinLick(minLick);
 allTrial=[];
 perMice=[];
+idOut=cell(0,0);
 for mice=1:length(ids)
     oneMice=[];
 %     lickEff
@@ -51,7 +52,7 @@ for mice=1:length(ids)
                 fn=f(fidx,:);
             end
             z.processFile(fn);
-            facSeq=z.getFactorSeq(false);
+            facSeq=z.getFactorSeq(false,true);
             if exist('suppressLaser','var') &&(~isempty(suppressLaser)) && suppressLaser
                 facSeq(:,3)=0;
             end
@@ -113,7 +114,9 @@ for mice=1:length(ids)
         lickEffOff=sum(oneMice(~matchOdor(oneMice(:,1),oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
         
         perMice=[perMice;perfOn,perfOff,ismember(lower(ids{mice}),lower(optoPos)),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
-        
+       
+        idOut{size(idOut,1)+1,1}=ids{mice};
+        idOut{size(idOut,1),2}=ismember(lower(ids{mice}),lower(optoPos));
     end
 end
 

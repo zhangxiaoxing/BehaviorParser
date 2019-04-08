@@ -54,12 +54,12 @@ return
 function getData()
 pause;
 load dnmsfiles.mat
-[allTrials5,perf5]=stats_GLM(dnmsfiles.delay5s);
-[allTrials8,perf8]=stats_GLM(dnmsfiles.delay8s);
-[allTrials12,perf12]=stats_GLM(dnmsfiles.delay12s);
-[allTrialsBase,perfBase]=stats_GLM(dnmsfiles.baseline);
-[allTrialsNoDelay,perfNoDelay]=stats_GLM(dnmsfiles.noDelayBaselineResp);
-[allTrialsNoLaser,perfNoLaser]=stats_GLM(dnmsfiles.noLaser,true);
+[allTrials5,~]=stats_GLM(dnmsfiles.delay5s);
+[allTrials8,~]=stats_GLM(dnmsfiles.delay8s);
+[allTrials12,~]=stats_GLM(dnmsfiles.delay12s);
+[allTrialsBase,~]=stats_GLM(dnmsfiles.baseline);
+[allTrialsNoDelay,~]=stats_GLM(dnmsfiles.noDelayBaselineResp);
+[allTrialsNoLaser,~]=stats_GLM(dnmsfiles.noLaser,true);
 %
 
 end
@@ -95,7 +95,7 @@ allTrials(:,end)=matchOdor(allTrials(:,1),allTrials(:,2));
 %%%%%%%%%%%%%%%%%%%%%%%
 %%% resample 
 %%%%%%%%%%%%%%%%%%%%%%%
-rpt=500;
+rpt=10;
 mdls=cell(rpt,1);
 
 for rptIdx=1:rpt
