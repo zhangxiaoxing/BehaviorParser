@@ -1,9 +1,9 @@
 
-function out=plot_DPA_dual(infiles,outfile1,outfile2,wtCriteria)
+function [out,ids]=plot_DPA_dual(infiles,outfile1,outfile2,wtCriteria)
 % [~,perfDPA]=stats_New_Cri(ODPAfiles.DPA_delay_laser);
 % for distrType=1%:2
 %     disp(distrType);
-[~,perfDPA]=stats_New_Cri(infiles,[],wtCriteria);
+[~,perfDPA,ids]=stats_New_Cri(infiles,[],wtCriteria);
 % out{distrType}=perfDPA;
 out=perfDPA;
 assignin('base','perfDPA_distr',perfDPA);
@@ -181,7 +181,7 @@ end
 end
 
 
-function [allTrial,perMice]=stats_New_Cri(files,distrType,wtCriteria)
+function [allTrial,perMice,idOut]=stats_New_Cri(files,distrType,wtCriteria)
 
 p=javaclasspath('-dynamic');
 if ~ismember('I:\java\zmat\build\classes\',p)
@@ -205,6 +205,7 @@ optoPos={'D10','D9','D8','D4','D11','D12','D3','D220','D214','D216', 'D219', 'D2
 z=zmat.ZmatDual();
 allTrial=[];
 perMice=[];
+idOut=cell(0,0);
 for mice=1:length(ids)
     oneMice=[];
     f=getMiceFile(ids{mice});
@@ -274,7 +275,8 @@ for mice=1:length(ids)
         lickEffOn=sum(oneMice(isPair(oneMice(:,1), oneMice(:,2)) & oneMice(:,3) ,15))*100/sum(oneMice(oneMice(:,3)==1,15));
         lickEffOff=sum(oneMice(isPair(oneMice(:,1), oneMice(:,2)) & oneMice(:,3)==0 ,15))*100/sum(oneMice(oneMice(:,3)==0,15));
         perMice=[perMice;perfOn,perfOff,ismember(ids{mice},optoPos),missOn,missOff,falseOn,falseOff,mice,lickEffOn,lickEffOff];
-        
+        idOut{size(idOut,1)+1,1}=ids{mice};
+        idOut{size(idOut,1),2}=ismember(lower(ids{mice}),lower(optoPos));
     end
 end
 
